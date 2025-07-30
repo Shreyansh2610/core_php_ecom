@@ -132,7 +132,7 @@ if (!isset($_SESSION['admin_logged_in'])) {
                     </div>
                 </div>
             </form>
-
+            <a href="product_list.php" class=" mt-2 btn btn-outline-secondary">Tutto Prodotti</a>
             <hr>
             <h4>Tutto Prodotti</h4>
             <div class="table-responsive">

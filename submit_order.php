@@ -22,6 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $quantities = $_POST['quantities'] ?? [];
     $send_method = $_POST['send_method'] ?? 'email';
     $brand = $_POST['brand'] ?? '';
+    
 
     if (!$supplier_id || !$order_number || empty($quantities)) {
         die("Invalid input.");
@@ -36,6 +37,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!$supplier) {
             throw new Exception("Supplier not found.");
         }
+
+        $orderSupplierName = $_POST['order_supplier_name'] ?? $supplier['name'];
+        $orderSupplierAddress = $_POST['order_supplier_address'] ?? $supplier['address'];
+        $orderSupplierEmail = $_POST['order_supplier_email'] ?? $supplier['email'];
+        $orderSupplierPhone = $_POST['order_supplier_phone'] ?? $supplier['phone'];
+        $orderSupplierVat = $_POST['order_supplier_vat'] ?? $supplier['vat_number'];
+        $orderSupplierSalesContact = $_POST['order_supplier_sales_contact'] ?? $supplier['sales_contact'];
 
         // Fetch all valid item IDs
         $validItemIds = $pdo->query("SELECT id FROM items")->fetchAll(PDO::FETCH_COLUMN);
@@ -124,12 +132,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               <strong>Banca:</strong> …
             </td>!-->
             <td width="100%" style="vertical-align:top;">
-              <strong>{$supplier['name']}</strong><br>
-              Responsabile: {$supplier['sales_contact']}<br>
-              Tel: {$supplier['phone']}<br>
-              Email: {$supplier['email']}<br>
-              {$supplier['address']}<br>
-              P.IVA: {$supplier['vat_number']}<br>
+              <strong>{$orderSupplierName}</strong><br>
+              Responsabile: {$orderSupplierSalesContact}<br>
+              Tel: {$orderSupplierPhone}<br>
+              Email: {$orderSupplierEmail}<br>
+              {$orderSupplierAddress}<br>
+              P.IVA: {$orderSupplierVat}<br>
             </td>
           </tr>
         </table>

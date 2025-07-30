@@ -2,8 +2,10 @@
 
 $host = 'localhost';
 $db   = 'u567802240_kdker';
-$user = 'u567802240_kdker';
-$pass = 'SdtXLH7{]c';
+// $user = 'u567802240_kdker';
+// $pass = 'SdtXLH7{]c';
+$user = 'root';
+$pass = '';
 $charset = 'utf8mb4';
 
 $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
