@@ -68,6 +68,42 @@ if ($whereClauses) {
             <h2 class="mb-0">Tutto Prodotti</h2>
             <a href="./home.php" class="btn btn-secondary">Torna alla Home</a>
         </div>
+        <h2 class="mb-2">Aggiungi prodotto</h2>
+        <form action="add_item.php" method="POST" enctype="multipart/form-data" class="mb-2">
+                <div class="row">
+                    <div class="col-md-6">
+                        <input type="text" name="name" class="form-control mb-2" placeholder="nome prodotto" required>
+                        <input type="text" name="sku" class="form-control mb-2" placeholder="SKU">
+                        <input type="text" name="brand" class="form-control mb-2" placeholder="marchio">
+                        <input type="text" name="units_per_box" class="form-control mb-2" placeholder="Unità per scatola" required>
+                        <select name="supplier_id" class="form-control mb-2" required>
+                            <option value="">-- seleziona fornitore --</option>
+                            <?php
+                            $stmt = $pdo->query("SELECT id, name FROM suppliers ORDER BY name");
+                            while ($row = $stmt->fetch()) {
+                                echo "<option value='{$row['id']}'>{$row['name']}</option>";
+                            }
+                            ?>
+                        </select>
+                        <select multiple name="category_ids[]" class="form-control mb-2">
+                            <option disabled>-- seleziona Categorie (hold Ctrl) --</option>
+                            <?php
+                            $stmt = $pdo->query("SELECT id, name FROM categories ORDER BY name");
+                            while ($row = $stmt->fetch()) {
+                                echo "<option value='{$row['id']}'>{$row['name']}</option>";
+                            }
+                            ?>
+                        </select>
+                         <div class="mb-3">
+                            <label for="image" class="form-label">Immagine del prodotto</label>
+                            <input type="file" name="image" id="image" class="form-control" accept="image/*">
+                        </div>
+                        <button type="submit" class="btn btn-success">aggiungi prodotto</button>
+                    </div>
+                </div>
+            </form>
+
+        <h2 class="mb-2">Tutto Prodotti</h2>
 
         <form method="GET" class="row g-3 mb-4">
             <div class="col-md-3">

@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         $pdo->commit();
-        header('Location: home.php?tab=items');
+        header('Location: product_list.php');
         exit;
     } catch (Exception $e) {
         $pdo->rollBack();
