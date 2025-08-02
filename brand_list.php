@@ -26,10 +26,10 @@ if (!isset($_SESSION['admin_logged_in'])) {
 <body>
     <div class="container mt-4">
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h2 class="mb-0">Tutto Marca</h2>
+            <h2 class="mb-0">Tutti i marchi</h2>
             <a href="./home.php" class="btn btn-secondary">Torna alla Home</a>
         </div>
-        <h2 class="mb-2">Aggiungi prodotto</h2>
+        <h2 class="mb-2">Aggiungi marchio</h2>
         <form action="add_brand.php" method="POST" enctype="multipart/form-data" class="mb-2">
                 <div class="row">
                     <div class="col-md-6">
@@ -59,7 +59,7 @@ if (!isset($_SESSION['admin_logged_in'])) {
                     $stmt = $pdo->prepare("
                         SELECT * 
                         FROM brands
-                        ORDER BY created_at
+                        ORDER BY created_at DESC
                     ");
                     $stmt->execute();
                     $brands = $stmt->fetchAll();
@@ -70,8 +70,8 @@ if (!isset($_SESSION['admin_logged_in'])) {
                             echo "<tr>
                                 <td>{$brand['brand']}</td>
                                 <td>
-                                    <a href='edit_item.php?id={$brand['id']}' class='btn btn-sm btn-warning'>Modificare</a>
-                                    <a href='delete_item.php?id={$brand['id']}' class='btn btn-sm btn-danger' onclick=\"return confirm('Delete this item?');\">Eliminare</a>
+                                    <a href='edit_brand.php?id={$brand['id']}' class='btn btn-sm btn-warning'>Modificare</a>
+                                    <a href='delete_brand.php?id={$brand['id']}' class='btn btn-sm btn-danger' onclick=\"return confirm('Delete this item?');\">Eliminare</a>
                                 </td>
                             </tr>";
                         }

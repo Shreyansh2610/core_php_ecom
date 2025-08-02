@@ -14,21 +14,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $pdo->beginTransaction();
     try {
-        $stmt = $pdo->prepare("INSERT INTO brand (name, sku, brand, units_per_box, supplier_id, image)
-                                VALUES (?, ?, ?, ?, ?, ?)");
-        $stmt->execute([$name, $sku, $brand, $units_per_box, $supplier_id, $image_filename]);
-        
-       $item_id = $pdo->lastInsertId();
-
-        if (!empty($category_ids)) {
-            $cat_stmt = $pdo->prepare("INSERT INTO item_categories (item_id, category_id) VALUES (?, ?)");
-            foreach ($category_ids as $cat_id) {
-                $cat_stmt->execute([$item_id, $cat_id]);
-            }
-        }
-
+        $stmt = $pdo->prepare("INSERT INTO brands (brand)
+                                VALUES (?)");
+        $stmt->execute([$name]);
         $pdo->commit();
-        header('Location: product_list.php');
+        header('Location: brand_list.php');
         exit;
     } catch (Exception $e) {
         $pdo->rollBack();

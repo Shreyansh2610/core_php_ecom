@@ -40,7 +40,7 @@ if (!isset($_SESSION['admin_logged_in'])) {
                         <a class="nav-link" href="product_list.php">Prodotti</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="band_list.php">Marca</a>
+                        <a class="nav-link" href="brand_list.php">Marca</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="home.php">Categorie</a>
