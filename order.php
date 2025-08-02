@@ -10,6 +10,7 @@ if (!isset($_SESSION['admin_logged_in'])) {
 
 // Fetch suppliers
 $suppliers = $pdo->query("SELECT id, name, address, phone, email, vat_number, sales_contact FROM suppliers ORDER BY name")->fetchAll(PDO::FETCH_ASSOC);
+$brands = $pdo->query("SELECT id, brand FROM brands ORDER BY brand")->fetchAll(PDO::FETCH_ASSOC);
 
 if (isset($_GET['success']) && $_GET['success'] == 1) {
 
@@ -28,17 +29,17 @@ if (isset($_GET['success']) && $_GET['success'] == 1) {
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <script>
     function fetchBrands(supplierId) {
-      fetch(`get_brands_by_supplier.php?supplier_id=${supplierId}`)
-        .then(res => res.json())
-        .then(data => {
-          const brandSelect = document.getElementById('brand');
-          const itemList = document.getElementById('item_list');
-          brandSelect.innerHTML = '<option value="">-- Select Brand --</option>';
-          itemList.innerHTML = '';
-          data.forEach(brand => {
-            brandSelect.innerHTML += `<option value="${brand}">${brand}</option>`;
-          });
-        });
+      // fetch(`get_brands_by_supplier.php?supplier_id=${supplierId}`)
+      //   .then(res => res.json())
+      //   .then(data => {
+      //     const brandSelect = document.getElementById('brand');
+      //     const itemList = document.getElementById('item_list');
+      //     brandSelect.innerHTML = '<option value="">-- Select Brand --</option>';
+      //     itemList.innerHTML = '';
+      //     data.forEach(brand => {
+      //       brandSelect.innerHTML += `<option value="${brand}">${brand}</option>`;
+      //     });
+      //   });
       // get_supplier_data_by_supplier
 
       fetch(`get_supplier_data_by_supplier.php?supplier_id=${supplierId}`)
@@ -55,15 +56,14 @@ if (isset($_GET['success']) && $_GET['success'] == 1) {
     }
 
     function fetchItemsByBrand(brandName) {
-      const supplierId = document.getElementById('supplier').value;
-      fetch(`get_items_by_brand.php?supplier_id=${supplierId}&brand=${encodeURIComponent(brandName)}`)
+      fetch(`get_items_by_brand.php?brand=${encodeURIComponent(brandName)}`)
         .then(res => res.json())
         .then(data => {
           const itemList = document.getElementById('item_list');
           itemList.innerHTML = '';
           data.forEach(item => {
             const imageHtml = item.image ?
-              `<img src="uploads/${encodeURIComponent(item.image)}" alt="Item Image" style="max-width: 60px; max-height: 60px;">` :
+              `<img src="uploads/${encodeURIComponent(item.image)}" alt="Item Image" style="width: 60px; height: 60px;">` :
               `<span class="text-muted">Nessuna immagine</span>`;
 
             itemList.innerHTML += `
@@ -158,6 +158,9 @@ if (isset($_GET['success']) && $_GET['success'] == 1) {
       <label for="brand" class="form-label">Seleziona Marca</label>
       <select name="brand" id="brand" class="form-select" required onchange="fetchItemsByBrand(this.value)">
         <option value="">-- Seleziona Marca --</option>
+        <?php foreach ($brands as $brand): ?>
+          <option value="<?= $brand['id'] ?>"><?= htmlspecialchars($brand['brand']) ?></option>
+        <?php endforeach; ?>
       </select>
     </div>
 
