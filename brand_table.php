@@ -35,7 +35,7 @@ try {
     $brands = $pdo->query("SELECT DISTINCT brand FROM items WHERE brand IS NOT NULL AND brand != '' ORDER BY brand")->fetchAll(PDO::FETCH_COLUMN);
 
     foreach ($brands as $key => $brand) {
-        echo "<br>".$brand;
+        echo "<br>" . $brand;
 
         // Insert brand if not exists
         $stmt = $pdo->prepare("INSERT IGNORE INTO brands (brand) VALUES (:brand)");
@@ -52,10 +52,38 @@ try {
             'brand_id' => $brand_id,
             'brand'    => $brand
         ]);
-
     }
-    
+
+    $sql = "
+        ALTER TABLE orders MODIFY status ENUM('pending','confirmed','complete','canceled', 'suspended') NOT NULL
+    ";
+
+    // Execute SQL
+    $pdo->exec($sql);
+    echo "Table 'orders' updated successfully!";
+
+    $sql = "
+        ALTER TABLE orders 
+ADD supplier_name VARCHAR(255) NULL AFTER status,
+ADD supplier_address TEXT NULL AFTER supplier_name,
+ADD supplier_phone VARCHAR(20) NULL AFTER supplier_address,
+ADD supplier_email VARCHAR(100) NULL AFTER supplier_phone,
+ADD supplier_vat_number VARCHAR(50) NULL AFTER supplier_email,
+ADD supplier_sales_contact VARCHAR(255) NULL AFTER supplier_vat_number;
+    ";
+
+    // Execute SQL
+    $pdo->exec($sql);
+    echo "Table 'orders' updated successfully!";
+
+    $sql = "UPDATE orders o
+JOIN suppliers s ON o.supplier_id = s.id
+SET o.supplier_name = s.name,o.supplier_address = s.address,o.supplier_phone = s.phone,o.supplier_email = s.email,o.supplier_vat_number = s.vat_number,o.supplier_sales_contact = s.sales_contact;
+";
+// Execute SQL
+    $pdo->exec($sql);
+    echo "Table 'orders' updated successfully!";
+
 } catch (PDOException $e) {
     echo "Connection failed or error creating table: " . $e->getMessage();
 }
-?>
