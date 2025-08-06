@@ -48,6 +48,9 @@ if (!isset($_SESSION['admin_logged_in'])) {
                     <li class="nav-item">
                         <a class="nav-link" href="view_orders.php">Visualizza ordini</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="suspendend_view_orders.php">Ordine sospeso</a>
+                    </li>
                 </ul>
             </div>
         </div>

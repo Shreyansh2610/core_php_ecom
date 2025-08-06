@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $quantities = $_POST['quantities'] ?? [];
     $send_method = $_POST['send_method'] ?? 'email';
     $brand = $_POST['brand'] ?? '';
-    
+
 
     if (!$supplier_id || !$order_number || empty($quantities)) {
         die("Invalid input.");
@@ -52,9 +52,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $pdo->beginTransaction();
 
         // Insert order
-        $stmt = $pdo->prepare("INSERT INTO orders (supplier_id, order_date, order_number, notes, sent_method)
-                               VALUES (?, ?, ?, ?, ?)");
-        $stmt->execute([$supplier_id, $order_date, $order_number, $notes, $send_method]);
+        $stmt = $pdo->prepare("INSERT INTO orders (supplier_id, order_date, order_number, notes, sent_method,supplier_name,supplier_address,supplier_phone,supplier_email,supplier_vat_number,supplier_sales_contact)
+                               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->execute([$supplier_id, $order_date, $order_number, $notes, $send_method, $orderSupplierName, $orderSupplierAddress, $orderSupplierPhone,$orderSupplierEmail,$orderSupplierVat,$orderSupplierSalesContact]);
         $order_id = $pdo->lastInsertId();
 
         // Insert order items
@@ -69,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($box_requested > 0 && in_array($item_id, $validItemIds)) {
                 $itemStmt->execute([$order_id, $item_id, $box_requested]);
 
-              // fetch item details for PDF (inside your foreach)
+                // fetch item details for PDF (inside your foreach)
                 $itemDetailsStmt = $pdo->prepare("
                     SELECT sku,
                            name,
@@ -81,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ");
                 $itemDetailsStmt->execute([$item_id]);
                 $itemDetails = $itemDetailsStmt->fetch(PDO::FETCH_ASSOC);
-                
+
                 $orderItems[] = [
                     'sku'            => $itemDetails['sku'],
                     'name'           => $itemDetails['name'],
@@ -90,20 +90,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'brand'          => $itemDetails['brand'],
                     'image'          => $itemDetails['image'], // add image filename
                 ];
-
             }
         }
 
-       // Generate PDF
+        // Generate PDF
         $pdf = new TCPDF();
         $pdf->AddPage();
-        
+
         // --- build your HTML in order --- //
-        $html  = ""; 
-        
+        $html  = "";
+
         // 1) Big header: order number and date
         $html .= "<h1>Ordine n. {$order_number} del " . date('d/m/Y', strtotime($order_date)) . "</h1>";
-        
+
         // 2) Supplier & Client Info Grid with dynamic supplier info
         $html .= <<<HTML
         <table cellpadding="4" border="0">
@@ -142,17 +141,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           </tr>
         </table>
         HTML;
-        
+
         // 3) Brand + Notes
         if (!empty($brand)) {
             $html .= "<p><strong>Brand:</strong> " . htmlspecialchars($brand) . "</p>";
         }
         $html .= "<p><strong>Notes:</strong> {$notes}</p>";
-        
+
         // 4) Items table
 
-$html .= "<h3>Prodotti</h3>";
-$html .= "<table border='1' cellpadding='4' cellspacing='0' width='100%'>
+        $html .= "<h3>Prodotti</h3>";
+        $html .= "<table border='1' cellpadding='4' cellspacing='0' width='100%'>
             <thead>
               <tr>
                 <th width='15%'>SKU</th>
@@ -164,31 +163,31 @@ $html .= "<table border='1' cellpadding='4' cellspacing='0' width='100%'>
               </tr>
              </thead>
           </table>";
-$pdf->writeHTML($html, true, false, true, false, '');
+        $pdf->writeHTML($html, true, false, true, false, '');
 
-// Get current position (X/Y) after header
-$x = $pdf->GetX();
-$y = $pdf->GetY();
+        // Get current position (X/Y) after header
+        $x = $pdf->GetX();
+        $y = $pdf->GetY();
 
-// Draw a horizontal line
-$pdf->Line($x, $y, $x + 190, $y); // 190 = width of line in mm
-$pdf->Ln(2); // Move down a bit for spacing
-
-
+        // Draw a horizontal line
+        $pdf->Line($x, $y, $x + 190, $y); // 190 = width of line in mm
+        $pdf->Ln(2); // Move down a bit for spacing
 
 
 
-$html = "<table border='1' cellpadding='4' cellspacing='0' width='100%'><tbody>";
 
-foreach ($orderItems as $item) {
-    $imagePath = $item['image'] ? 'uploads/' . $item['image'] : ''; // full path
 
-    // Resize image HTML if available
-    $imageHtml = $imagePath && file_exists($imagePath)
-        ? '<img src="' . $imagePath . '" height="40">'
-        : 'N/A';
+        $html = "<table border='1' cellpadding='4' cellspacing='0' width='100%'><tbody>";
 
-    $html .= "<tr>
+        foreach ($orderItems as $item) {
+            $imagePath = $item['image'] ? 'uploads/' . $item['image'] : ''; // full path
+
+            // Resize image HTML if available
+            $imageHtml = $imagePath && file_exists($imagePath)
+                ? '<img src="' . $imagePath . '" height="40">'
+                : 'N/A';
+
+            $html .= "<tr>
                 <td width='15%'>{$item['sku']}</td>
                 <td width='30%'>{$item['name']}</td>
                 <td width='5%'>{$item['units_per_box']}</td>
@@ -196,10 +195,10 @@ foreach ($orderItems as $item) {
                 <td width='25%'>{$item['brand']}</td>
                 <td width='20%'>{$imageHtml}</td>
               </tr>";
-}
+        }
 
-$html .= "</tbody></table>";
-$pdf->writeHTML($html, true, false, true, false, '');
+        $html .= "</tbody></table>";
+        $pdf->writeHTML($html, true, false, true, false, '');
 
 
 
@@ -215,11 +214,11 @@ $pdf->writeHTML($html, true, false, true, false, '');
         }
         $pdfFilePath = $saveDir . '/' . $pdfFileName;
         $pdf->Output($pdfFilePath, 'F');
-        
+
         // Save pdf_filename to orders table
         $updateStmt = $pdo->prepare("UPDATE orders SET pdf_filename = ? WHERE id = ?");
         $updateStmt->execute([$pdfFileName, $order_id]);
-        
+
         // Generate public link (adjust with your actual domain/path)
         $publicPdfUrl = "./orders_pdf/{$pdfFileName}";
 
@@ -272,7 +271,7 @@ $pdf->writeHTML($html, true, false, true, false, '');
         header("Location: order.php?success=1");
         exit;
     } catch (Exception $e) {
-       /* $pdo->rollBack();
+        /* $pdo->rollBack();
         echo "Error: " . $e->getMessage();*/
     }
 } else {

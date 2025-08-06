@@ -18,19 +18,83 @@ $statusOptions = [
     'pending' => 'in attesa',
     'confirmed' => 'confermato',
     'complete' => 'completato',
-    'complete' => 'completato',
     'canceled' => 'annullato',
+    'suspended' => 'sospesa',
 ];
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $status = $_POST['status'];
+    $supplier_id = $_POST['supplier_id'] ?? 0;
+    $order_date = $_POST['order_date'] ?? date('Y-m-d');
+    $order_number = $_POST['order_number'] ?? '';
+    $notes = $_POST['notes'] ?? '';
+    $quantities = $_POST['quantities'] ?? [];
+    $send_method = $_POST['send_method'] ?? 'email';
+    $brand = $_POST['brand'] ?? '';
     if (!array_key_exists($status, $statusOptions)) {
         die("Invalid status.");
     }
 
-    $stmt = $pdo->prepare("UPDATE orders SET status = ?, created_at = NOW() WHERE id = ?");
-    $stmt->execute([$status, $order_id]);
+    $orderSupplierName = $_POST['order_supplier_name'] ?? $supplier['name'];
+    $orderSupplierAddress = $_POST['order_supplier_address'] ?? $supplier['address'];
+    $orderSupplierEmail = $_POST['order_supplier_email'] ?? $supplier['email'];
+    $orderSupplierPhone = $_POST['order_supplier_phone'] ?? $supplier['phone'];
+    $orderSupplierVat = $_POST['order_supplier_vat'] ?? $supplier['vat_number'];
+    $orderSupplierSalesContact = $_POST['order_supplier_sales_contact'] ?? $supplier['sales_contact'];
+
+    // Fetch all valid item IDs
+        $validItemIds = $pdo->query("SELECT id FROM items")->fetchAll(PDO::FETCH_COLUMN);
+        $validItemIds = array_map('intval', $validItemIds);
+    // Fetch supplier details
+    $stmt = $pdo->prepare("SELECT name, address, phone, email, vat_number, sales_contact FROM suppliers WHERE id = ?");
+    $stmt->execute([$supplier_id]);
+    $supplier = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$supplier) {
+        throw new Exception("Supplier not found.");
+    }
+
+    $stmt = $pdo->prepare("UPDATE orders SET status=?, supplier_id =?, order_date=?,order_number=?,notes=?,sent_method=?,supplier_name=?,supplier_address=?,supplier_phone=?,supplier_email=?,supplier_vat_number=?,supplier_sales_contact=?, created_at=NOW() WHERE id = ?");
+    $stmt->execute([$status, $supplier_id, $order_date, $order_number, $notes, $send_method, $orderSupplierName, $orderSupplierAddress, $orderSupplierPhone, $orderSupplierEmail, $orderSupplierVat, $orderSupplierSalesContact, $order_id]);
+
+    $stmt = $pdo->prepare("DELETE FROM order_items WHERE order_id = ?");
+    $stmt->execute([$order_id]);
+
+    $itemStmt = $pdo->prepare("INSERT INTO order_items (order_id, item_id, box_requested)
+        VALUES (?, ?, ?)");
+
+    $orderItems = [];
+    foreach ($quantities as $item_id => $box_requested) {
+        $item_id = (int)$item_id;
+        $box_requested = (int)$box_requested;
+
+        if ($box_requested > 0 && in_array($item_id, $validItemIds)) {
+            $itemStmt->execute([$order_id, $item_id, $box_requested]);
+
+            // fetch item details for PDF (inside your foreach)
+            $itemDetailsStmt = $pdo->prepare("
+                    SELECT sku,
+                           name,
+                           units_per_box,
+                           brand,
+                           image
+                      FROM items
+                     WHERE id = ?
+                ");
+            $itemDetailsStmt->execute([$item_id]);
+            $itemDetails = $itemDetailsStmt->fetch(PDO::FETCH_ASSOC);
+
+            $orderItems[] = [
+                'sku'            => $itemDetails['sku'],
+                'name'           => $itemDetails['name'],
+                'units_per_box'  => $itemDetails['units_per_box'],
+                'box_requested'  => $box_requested,
+                'brand'          => $itemDetails['brand'],
+                'image'          => $itemDetails['image'], // add image filename
+            ];
+        }
+    }
     header("Location: view_orders.php");
     exit;
 }
@@ -48,14 +112,8 @@ $brandQuery = $pdo->prepare("SELECT DISTINCT items.brand FROM order_items
 $brandQuery->execute([$order_id]);
 
 $orderBrand = $brandQuery->fetchColumn();
+var_dump($orderBrand);
 
-$currentItemsQuery = $pdo->prepare("SELECT * FROM order_items 
-    WHERE order_items.order_id = ?");
-
-$currentItemsQuery->execute([$order_id]);
-
-$currentItems = $currentItemsQuery->fetchAll();
-var_dump($currentItems);
 $itemsListQuery = $pdo->prepare("SELECT * FROM items 
     WHERE items.brand = ?");
 
@@ -76,7 +134,7 @@ if (!$order) {
 
 <head>
     <meta charset="UTF-8">
-    <title>Modifica Stato Ordine</title>
+    <title>Modifica ordine</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script>
         function fetchBrands(supplierId) {
@@ -96,7 +154,6 @@ if (!$order) {
             fetch(`get_supplier_data_by_supplier.php?supplier_id=${supplierId}`)
                 .then(res => res.json())
                 .then(data => {
-                    console.log(data)
                     document.querySelector('[name="order_supplier_name"]').value = data['name'] ?? '';
                     document.querySelector('[name="order_supplier_address"]').value = data['address'] ?? '';
                     document.querySelector('[name="order_supplier_email"]').value = data['email'] ?? '';
@@ -210,7 +267,7 @@ if (!$order) {
             <select name="brand" id="brand" class="form-select" required onchange="fetchItemsByBrand(this.value)">
                 <option value="">-- Seleziona Marca --</option>
                 <?php foreach ($brands as $brand): ?>
-                    <option value="<?= $brand['id'] ?>" <?= $brand['id'] === $orderBrand ? 'selected' : '' ?>><?= htmlspecialchars($brand['brand']) ?></option>
+                    <option value="<?= $brand['id'] ?>" <?= $brand['id'] == $orderBrand ? 'selected' : '' ?>><?= htmlspecialchars($brand['brand']) ?></option>
                 <?php endforeach; ?>
             </select>
         </div>
@@ -232,11 +289,11 @@ if (!$order) {
         <div class="mb-3">
             <label class="form-label">Invia ordine tramite</label><br>
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="send_method" id="sendEmail" value="email" <?= $order['send_method'] == 'email' ? 'checked' : '' ?>>
+                <input class="form-check-input" type="radio" name="send_method" id="sendEmail" value="email" <?= $order['sent_method'] == 'email' ? 'checked' : '' ?>>
                 <label class="form-check-label" for="sendEmail">E-mail</label>
             </div>
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="send_method" id="sendWhatsApp" value="whatsapp" <?= $order['send_method'] == 'whatsapp' ? 'checked' : '' ?>>
+                <input class="form-check-input" type="radio" name="send_method" id="sendWhatsApp" value="whatsapp" <?= $order['sent_method'] == 'whatsapp' ? 'checked' : '' ?>>
                 <label class="form-check-label" for="sendWhatsApp">WhatsApp</label>
             </div>
         </div>
@@ -255,10 +312,17 @@ if (!$order) {
             </thead>
             <tbody id="item_list">
                 <?php foreach ($itemsLists as $items): ?>
+                    <?php
+                    $currentItemsQuery = $pdo->prepare("SELECT box_requested FROM order_items WHERE order_items.order_id = ? AND order_items.item_id = ?");
+
+                    $currentItemsQuery->execute([$order_id, $items['id']]);
+
+                    $currentItems = $currentItemsQuery->fetchColumn();
+                    ?>
                     <tr>
                         <td>
-                            <?php if(isset($items['image'])): ?>
-                            <img src="uploads/<?php echo $items['image']; ?>" alt="Item Image" style="width: 60px; height: 60px;">
+                            <?php if (isset($items['image'])): ?>
+                                <img src="uploads/<?php echo $items['image']; ?>" alt="Item Image" style="width: 60px; height: 60px;">
                             <?php else: ?>
                                 <span class="text-muted">Nessuna immagine</span>
                             <?php endif ?>
@@ -269,7 +333,7 @@ if (!$order) {
                         <td>
                             <div class="input-group">
                                 <button type="button" class="btn btn-outline-secondary" onclick="adjustQuantity(<?php echo $items['id']; ?>, -1)">−</button>
-                                <input type="number" id="qty-${item.id}" name="quantities[<?php echo $items['id']; ?>]" min="0" class="form-control text-center" value="0" />
+                                <input type="number" id="qty-${item.id}" name="quantities[<?php echo $items['id']; ?>]" min="0" class="form-control text-center" value="<?php echo ($currentItems ? $currentItems : 0); ?>" />
                                 <button type="button" class="btn btn-outline-secondary" onclick="adjustQuantity(<?php echo $items['id']; ?>, 1)">+</button>
                             </div>
                         </td>
@@ -278,7 +342,7 @@ if (!$order) {
             </tbody>
 
         </table>
-        <button type="submit" class="btn btn-primary">Aggiorna Stato</button>
+        <button type="submit" class="btn btn-primary">Aggiornamento</button>
         <a href="view_orders.php" class="btn btn-secondary">Annulla</a>
     </form>
 </body>
