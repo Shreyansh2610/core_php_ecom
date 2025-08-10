@@ -15,10 +15,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'] ?? '';
     $vat_number = $_POST['vat_number'] ?? '';
     $sales_contact = $_POST['sales_contact'] ?? '';
+    $agent_telephone = $_POST['agent_telphone'] ?? '';
+    $sdi = $_POST['sdi'] ?? '';
+    $iban = $_POST['iban'] ?? '';
+    $supp_email = $_POST['supplier_email'] ?? '';
+    $supp_email_pec = $_POST['supplier_email_pec'] ?? '';
+    $supp_cell = $_POST['supplier_cell'] ?? '';
+    $supp_res = $_POST['supplier_responsible'] ?? '';
+    $payment = $_POST['payment'] ?? '';
 
-    $stmt = $pdo->prepare("INSERT INTO suppliers (name, address, phone, email, vat_number, sales_contact)
-                            VALUES (?, ?, ?, ?, ?, ?)");
-    $stmt->execute([$name, $address, $phone, $email, $vat_number, $sales_contact]);
+    $stmt = $pdo->prepare("INSERT INTO suppliers (name, address, phone, email, vat_number, sales_contact,agent_telphone,sdi,iban,supplier_email,supplier_email_pec,supplier_cell,supplier_responsible,payment)
+                            VALUES (?, ?, ?, ?, ?, ?,?, ?, ?, ?,?, ?, ?, ?)");
+    $stmt->execute([$name, $address, $phone, $email, $vat_number, $sales_contact,$agent_telephone,$agent_telephone,$sdi,$iban,$supp_email,$supp_email_pec,$supp_cell,$supp_res,$payment]);
 
     header('Location: home.php#suppliers');
     exit;

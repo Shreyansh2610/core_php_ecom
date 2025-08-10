@@ -1,4 +1,12 @@
 <?php
+require 'vendor/autoload.php'; // Ensure Composer's autoload is included
+// require_once __DIR__ . '/tcpdf/tcpdf_include.php';
+
+//use PHPMailer\PHPMailer\PHPMailer;
+//use PHPMailer\PHPMailer\Exception;
+//use Twilio\Rest\Client;
+// use TCPDF;
+
 // edit_order.php
 session_start();
 require 'config.php';
@@ -36,24 +44,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         die("Invalid status.");
     }
 
+    $stmt = $pdo->prepare("SELECT * FROM suppliers WHERE id = ?");
+    $stmt->execute([$supplier_id]);
+    $supplier = $stmt->fetch(PDO::FETCH_ASSOC);
+    if (!$supplier) {
+        throw new Exception("Supplier not found.");
+    }
+
     $orderSupplierName = $_POST['order_supplier_name'] ?? $supplier['name'];
     $orderSupplierAddress = $_POST['order_supplier_address'] ?? $supplier['address'];
-    $orderSupplierEmail = $_POST['order_supplier_email'] ?? $supplier['email'];
+    $orderSupplierEmail = $_POST['order_supplier_email'] ?? $supplier['supplier_email'];
     $orderSupplierPhone = $_POST['order_supplier_phone'] ?? $supplier['phone'];
     $orderSupplierVat = $_POST['order_supplier_vat'] ?? $supplier['vat_number'];
     $orderSupplierSalesContact = $_POST['order_supplier_sales_contact'] ?? $supplier['sales_contact'];
 
     // Fetch all valid item IDs
-        $validItemIds = $pdo->query("SELECT id FROM items")->fetchAll(PDO::FETCH_COLUMN);
-        $validItemIds = array_map('intval', $validItemIds);
+    $validItemIds = $pdo->query("SELECT id FROM items")->fetchAll(PDO::FETCH_COLUMN);
+    $validItemIds = array_map('intval', $validItemIds);
     // Fetch supplier details
-    $stmt = $pdo->prepare("SELECT name, address, phone, email, vat_number, sales_contact FROM suppliers WHERE id = ?");
-    $stmt->execute([$supplier_id]);
-    $supplier = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if (!$supplier) {
-        throw new Exception("Supplier not found.");
-    }
+    $pdo->beginTransaction();
 
     $stmt = $pdo->prepare("UPDATE orders SET status=?, supplier_id =?, order_date=?,order_number=?,notes=?,sent_method=?,supplier_name=?,supplier_address=?,supplier_phone=?,supplier_email=?,supplier_vat_number=?,supplier_sales_contact=?, created_at=NOW() WHERE id = ?");
     $stmt->execute([$status, $supplier_id, $order_date, $order_number, $notes, $send_method, $orderSupplierName, $orderSupplierAddress, $orderSupplierPhone, $orderSupplierEmail, $orderSupplierVat, $orderSupplierSalesContact, $order_id]);
@@ -95,6 +104,153 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ];
         }
     }
+
+    // Generate PDF
+    $pdf = new TCPDF();
+    $pdf->AddPage();
+
+    // --- build your HTML in order --- //
+    $html  = "";
+
+    // 1) Big header: order number and date
+    $html .= "<h1>Ordine n. {$order_number} del " . date('d/m/Y', strtotime($order_date)) . "</h1>";
+    $salesResponsible = $supplier['supplier_responsible'] ?? '';
+    $salesCell = $supplier['supplier_cell'] ?? '';
+    $salesEmailPec = $supplier['supplier_email_pec'] ?? '';
+    $sdi = $supplier['sdi'] ?? '';
+    $iban = $supplier['iban'] ?? '';
+    $agent_telephone = $supplier['agent_telphone'] ?? '';
+    // 2) Supplier & Client Info Grid with dynamic supplier info
+    $html .= <<<HTML
+        <table cellpadding="4">
+          <tr>
+            <td width="50%" style="border: 1px solid black">
+              <strong>{$orderSupplierName}</strong><br>
+              Responsabile: {$salesResponsible}<br>
+              Tel: {$orderSupplierPhone} &nbsp;&nbsp;Cell: {$salesCell}<br>
+              Email: {$orderSupplierEmail}<br>
+              Email pec: {$salesEmailPec}<br>
+              {$orderSupplierAddress}<br>
+              IBAN: {$iban}<br>
+              Codice SDI: {$sdi}<br>
+              P.IVA: {$orderSupplierVat}<br>
+            </td>
+            <td width="50%" style="border: 1px solid black">
+                <strong>{$orderSupplierSalesContact}</strong><br>
+                Tel: {$agent_telephone}<br>
+                Email: {$supplier['email']}
+            </td>
+          </tr>
+          <tr>
+           <td width="50%" style="border: 1px solid black">
+              <strong>Consegna:</strong> PRONTA<br>
+              <strong>Imballo:</strong><br>
+              <strong>Resa:</strong><br>
+              <strong>Spedizione:</strong><br>
+              <strong>Pagamento:</strong> BONIFICO ANTICIPATO<br>
+              <strong>Banca:</strong>
+            </td>
+            <td width="50%" style="border: 1px solid black">
+              <strong>LA BOTTEGA GOLOSA DI BIANCHI TAMARA & C. S.N.C.</strong><br>
+              (Interno Mercato Centrale)<br>
+              Tel: 0550541491 • Cell: 3511874871<br>
+              Email: filippo.ciapetti@labottegagolosa.it<br>
+              Via dell’Ariento (Interno Mercato Centrale)<br>
+              Firenze 50123<br>
+              P.IVA: 05279070485<br>
+              Chiusura: DOMENICA<br>
+              PEC: labottegagolosa@cert.cna.it<br>
+              Resp.: Filippo Ciapetti<br>
+              Codice SDI: SUBM70N
+            </td>
+          </tr>
+        </table>
+        HTML;
+
+    // 3) Brand + Notes
+    if (!empty($brand)) {
+        $stmt = $pdo->prepare("SELECT * FROM brands WHERE id = ?");
+        $stmt->execute([$brand]);
+        $brandData = $stmt->fetch(PDO::FETCH_ASSOC);
+        $html .= "<p><strong>Brand:</strong> " . htmlspecialchars($brandData['brand']) . "</p>";
+    }
+    $html .= "<p><strong>Notes:</strong> {$notes}</p>";
+
+    // 4) Items table
+
+    $html .= "<h3>Prodotti</h3>";
+    $html .= "<table border='1' cellpadding='4' cellspacing='0' width='100%'>
+            <thead style='background:#D3D3D3'>
+              <tr>
+                <th width='15%'>SKU</th>
+                <th width='30%'>Nome del prodotto</th>
+                <th width='5%'>Unità/Scatola</th>
+                <th width='5%'>Scatole</th>
+                <th width='25%'>Marca</th>
+                <th width='20%'>Immagine</th>
+              </tr>
+             </thead>
+          </table>";
+    $pdf->writeHTML($html, true, false, true, false, '');
+
+    // Get current position (X/Y) after header
+    $x = $pdf->GetX();
+    $y = $pdf->GetY();
+
+    // Draw a horizontal line
+    $pdf->Line($x, $y, $x + 190, $y); // 190 = width of line in mm
+    $pdf->Ln(2); // Move down a bit for spacing
+
+
+
+
+
+    $html = "<table border='1' cellpadding='4' cellspacing='0' width='100%'><tbody>";
+
+    foreach ($orderItems as $item) {
+        $imagePath = $item['image'] ? 'uploads/' . $item['image'] : ''; // full path
+
+        // Resize image HTML if available
+        $imageHtml = $imagePath && file_exists($imagePath)
+            ? '<img src="' . $imagePath . '" height="40">'
+            : 'N/A';
+
+        $html .= "<tr>
+                <td width='15%'>{$item['sku']}</td>
+                <td width='30%'>{$item['name']}</td>
+                <td width='5%'>{$item['units_per_box']}</td>
+                <td width='5%'>{$item['box_requested']}</td>
+                <td width='25%'>{$item['brand']}</td>
+                <td width='20%'>{$imageHtml}</td>
+              </tr>";
+    }
+
+    $html .= "</tbody></table>";
+    $pdf->writeHTML($html, true, false, true, false, '');
+
+
+
+
+    // Save PDF to orders_pdf/ folder with unique filename
+    $timestamp = time();
+    $sanitized_order_number = preg_replace('/[^A-Za-z0-9_\-]/', '', $order_number);
+    $pdfFileName = "order_{$sanitized_order_number}_{$timestamp}.pdf";
+
+    $saveDir = __DIR__ . '/orders_pdf';
+    if (!file_exists($saveDir)) {
+        mkdir($saveDir, 0755, true);
+    }
+    $pdfFilePath = $saveDir . '/' . $pdfFileName;
+    $pdf->Output($pdfFilePath, 'F');
+
+    // Save pdf_filename to orders table
+    $updateStmt = $pdo->prepare("UPDATE orders SET pdf_filename = ? WHERE id = ?");
+    $updateStmt->execute([$pdfFileName, $order_id]);
+
+    // Generate public link (adjust with your actual domain/path)
+    $publicPdfUrl = "./orders_pdf/{$pdfFileName}";
+    $pdo->commit();
+
     header("Location: view_orders.php");
     exit;
 }

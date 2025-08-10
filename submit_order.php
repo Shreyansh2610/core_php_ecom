@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     try {
         // Fetch supplier details
-        $stmt = $pdo->prepare("SELECT name, address, phone, email, vat_number, sales_contact FROM suppliers WHERE id = ?");
+        $stmt = $pdo->prepare("SELECT * FROM suppliers WHERE id = ?");
         $stmt->execute([$supplier_id]);
         $supplier = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $orderSupplierName = $_POST['order_supplier_name'] ?? $supplier['name'];
         $orderSupplierAddress = $_POST['order_supplier_address'] ?? $supplier['address'];
-        $orderSupplierEmail = $_POST['order_supplier_email'] ?? $supplier['email'];
+        $orderSupplierEmail = $_POST['order_supplier_email'] ?? $supplier['supplier_email'];
         $orderSupplierPhone = $_POST['order_supplier_phone'] ?? $supplier['phone'];
         $orderSupplierVat = $_POST['order_supplier_vat'] ?? $supplier['vat_number'];
         $orderSupplierSalesContact = $_POST['order_supplier_sales_contact'] ?? $supplier['sales_contact'];
@@ -54,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Insert order
         $stmt = $pdo->prepare("INSERT INTO orders (supplier_id, order_date, order_number, notes, sent_method,supplier_name,supplier_address,supplier_phone,supplier_email,supplier_vat_number,supplier_sales_contact)
                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->execute([$supplier_id, $order_date, $order_number, $notes, $send_method, $orderSupplierName, $orderSupplierAddress, $orderSupplierPhone,$orderSupplierEmail,$orderSupplierVat,$orderSupplierSalesContact]);
+        $stmt->execute([$supplier_id, $order_date, $order_number, $notes, $send_method, $orderSupplierName, $orderSupplierAddress, $orderSupplierPhone, $orderSupplierEmail, $orderSupplierVat, $orderSupplierSalesContact]);
         $order_id = $pdo->lastInsertId();
 
         // Insert order items
@@ -102,12 +102,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // 1) Big header: order number and date
         $html .= "<h1>Ordine n. {$order_number} del " . date('d/m/Y', strtotime($order_date)) . "</h1>";
-
+        $salesResponsible = $supplier['supplier_responsible']??'';
+        $salesCell = $supplier['supplier_cell']??'';
+        $salesEmailPec = $supplier['supplier_email_pec']??'';
+        $sdi = $supplier['sdi']??'';
+        $iban = $supplier['iban']??'';
+        $agent_telephone = $supplier['agent_telphone']??'';
         // 2) Supplier & Client Info Grid with dynamic supplier info
         $html .= <<<HTML
-        <table cellpadding="4" border="0">
+        <table cellpadding="4">
           <tr>
-             <td width="100%" style="vertical-align:top;">
+            <td width="50%" style="border: 1px solid black">
+              <strong>{$orderSupplierName}</strong><br>
+              Responsabile: {$salesResponsible}<br>
+              Tel: {$orderSupplierPhone} &nbsp;&nbsp;Cell: {$salesCell}<br>
+              Email: {$orderSupplierEmail}<br>
+              Email pec: {$salesEmailPec}<br>
+              {$orderSupplierAddress}<br>
+              IBAN: {$iban}<br>
+              Codice SDI: {$sdi}<br>
+              P.IVA: {$orderSupplierVat}<br>
+            </td>
+            <td width="50%" style="border: 1px solid black">
+                <strong>{$orderSupplierSalesContact}</strong><br>
+                Tel: {$agent_telephone}<br>
+                Email: {$supplier['email']}
+            </td>
+          </tr>
+          <tr>
+           <td width="50%" style="border: 1px solid black">
+              <strong>Consegna:</strong> PRONTA<br>
+              <strong>Imballo:</strong><br>
+              <strong>Resa:</strong><br>
+              <strong>Spedizione:</strong><br>
+              <strong>Pagamento:</strong> BONIFICO ANTICIPATO<br>
+              <strong>Banca:</strong>
+            </td>
+            <td width="50%" style="border: 1px solid black">
               <strong>LA BOTTEGA GOLOSA DI BIANCHI TAMARA & C. S.N.C.</strong><br>
               (Interno Mercato Centrale)<br>
               Tel: 0550541491 • Cell: 3511874871<br>
@@ -121,30 +152,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               Codice SDI: SUBM70N
             </td>
           </tr>
-          <tr>
-           <!-- <td width="50%" style="vertical-align:top;">
-              <strong>Consegna:</strong> PRONTA<br>
-              <strong>Imballo:</strong> …<br>
-              <strong>Resa:</strong> …<br>
-              <strong>Spedizione:</strong> …<br>
-              <strong>Pagamento:</strong> BONIFICO ANTICIPATO<br>
-              <strong>Banca:</strong> …
-            </td>!-->
-            <td width="100%" style="vertical-align:top;">
-              <strong>{$orderSupplierName}</strong><br>
-              Responsabile: {$orderSupplierSalesContact}<br>
-              Tel: {$orderSupplierPhone}<br>
-              Email: {$orderSupplierEmail}<br>
-              {$orderSupplierAddress}<br>
-              P.IVA: {$orderSupplierVat}<br>
-            </td>
-          </tr>
         </table>
         HTML;
 
         // 3) Brand + Notes
         if (!empty($brand)) {
-            $html .= "<p><strong>Brand:</strong> " . htmlspecialchars($brand) . "</p>";
+            $stmt = $pdo->prepare("SELECT * FROM brands WHERE id = ?");
+        $stmt->execute([$brand]);
+        $brandData = $stmt->fetch(PDO::FETCH_ASSOC);
+            $html .= "<p><strong>Brand:</strong> " . htmlspecialchars($brandData['brand']) . "</p>";
         }
         $html .= "<p><strong>Notes:</strong> {$notes}</p>";
 
@@ -152,7 +168,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $html .= "<h3>Prodotti</h3>";
         $html .= "<table border='1' cellpadding='4' cellspacing='0' width='100%'>
-            <thead>
+            <thead style='background:#D3D3D3'>
               <tr>
                 <th width='15%'>SKU</th>
                 <th width='30%'>Nome del prodotto</th>

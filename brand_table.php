@@ -84,6 +84,23 @@ SET o.supplier_name = s.name,o.supplier_address = s.address,o.supplier_phone = s
     $pdo->exec($sql);
     echo "Table 'orders' updated successfully!";
 
+
+    $sql = "
+        ALTER TABLE suppliers
+ADD agent_telphone VARCHAR(20) NULL AFTER sales_contact,
+ADD sdi VARCHAR(50) NULL AFTER agent_telphone,
+ADD iban TEXT NULL AFTER sdi,
+ADD supplier_email VARCHAR(255) NULL AFTER iban,
+ADD supplier_email_pec VARCHAR(255) NULL AFTER supplier_email,
+ADD supplier_cell VARCHAR(20) NULL AFTER supplier_email_pec,
+ADD supplier_responsible VARCHAR(255) NULL AFTER supplier_cell,
+ADD payment VARCHAR(255) NULL AFTER supplier_responsible
+    ";
+
+    // Execute SQL
+    $pdo->exec($sql);
+    echo "Table 'suppliers' updated successfully!";
+
 } catch (PDOException $e) {
     echo "Connection failed or error creating table: " . $e->getMessage();
 }

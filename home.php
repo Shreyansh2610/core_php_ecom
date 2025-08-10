@@ -87,9 +87,17 @@ if (!isset($_SESSION['admin_logged_in'])) {
                             <input type="text" name="name" class="form-control mb-2" placeholder="Nome Fornitore" required>
                             <input type="text" name="address" class="form-control mb-2" placeholder="indirizzo">
                             <input type="text" name="phone" class="form-control mb-2" placeholder="telefono">
-                            <input type="email" name="email" class="form-control mb-2" placeholder="Email">
+                            <input type="email" name="email" class="form-control mb-2" placeholder="E-mail dell'agente">
                             <input type="text" name="vat_number" class="form-control mb-2" placeholder="P.IVA">
-                            <input type="text" name="sales_contact" class="form-control mb-2" placeholder="Rappresentante vendite">
+                            <input type="text" name="sales_contact" class="form-control mb-2" placeholder="Rappresentante vendite (Agente)">
+                            <input type="text" name="agent_telphone" class="form-control mb-2" placeholder="Telefono dell'agente">
+                            <input type="text" name="sdi" class="form-control mb-2" placeholder="SDI">
+                            <input type="text" name="iban" class="form-control mb-2" placeholder="IBAN">
+                            <input type="text" name="supplier_email" class="form-control mb-2" placeholder="E-mail del fornitore">
+                            <input type="text" name="supplier_email_pec" class="form-control mb-2" placeholder="Email fornitore pec">
+                            <input type="text" name="supplier_cell" class="form-control mb-2" placeholder="Cellulare del fornitore">
+                            <input type="text" name="supplier_responsible" class="form-control mb-2" placeholder="Responsabile">
+                            <!-- <input type="text" name="payment" class="form-control mb-2" placeholder="Pagamento"> -->
                             <button type="submit" class="btn btn-success">Aggiungi Fornitore</button>
                         </div>
                     </div>
