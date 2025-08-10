@@ -167,6 +167,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $html .= "<p><strong>Brand:</strong> " . htmlspecialchars($brandData['brand']) . "</p>";
         }
         $html .= "<p><strong>Notes:</strong> {$notes}</p>";
+        $totalOrders = count($orderItems);
+        $html .= "<p><strong>Ordini totali:</strong> {$totalOrders}</p>";
 
         // 4) Items table
 

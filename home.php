@@ -51,6 +51,9 @@ if (!isset($_SESSION['admin_logged_in'])) {
                     <li class="nav-item">
                         <a class="nav-link" href="suspendend_view_orders.php">Ordine sospeso</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="edit_contact.php?id=1">Contatto</a>
+                    </li>
                 </ul>
             </div>
         </div>
