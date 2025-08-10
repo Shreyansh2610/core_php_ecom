@@ -120,6 +120,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $sdi = $supplier['sdi'] ?? '';
     $iban = $supplier['iban'] ?? '';
     $agent_telephone = $supplier['agent_telphone'] ?? '';
+    
+    $stmt = $pdo->prepare("SELECT * FROM contact_details WHERE id = ?");
+    $stmt->execute([1]);
+    $contact = $stmt->fetch(PDO::FETCH_ASSOC);
     // 2) Supplier & Client Info Grid with dynamic supplier info
     $html .= <<<HTML
         <table cellpadding="4">
@@ -151,17 +155,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               <strong>Banca:</strong>
             </td>
             <td width="50%" style="border: 1px solid black">
-              <strong>LA BOTTEGA GOLOSA DI BIANCHI TAMARA & C. S.N.C.</strong><br>
-              (Interno Mercato Centrale)<br>
-              Tel: 0550541491 • Cell: 3511874871<br>
-              Email: filippo.ciapetti@labottegagolosa.it<br>
-              Via dell’Ariento (Interno Mercato Centrale)<br>
-              Firenze 50123<br>
-              P.IVA: 05279070485<br>
-              Chiusura: DOMENICA<br>
-              PEC: labottegagolosa@cert.cna.it<br>
-              Resp.: Filippo Ciapetti<br>
-              Codice SDI: SUBM70N
+              <strong>{$contact['name']}</strong><br>
+              Tel: {$contact['telphone']} • Cell: {$contact['cell']}<br>
+              Email: {$contact['email']}<br>
+              {$contact['address']}<br>
+              P.IVA: {$contact['vat']}<br>
+              Chiusura: {$contact['closure']}<br>
+              PEC: {$contact['email_pec']}<br>
+              Resp.: {$contact['responsible']}<br>
+              Codice SDI: {$contact['sdi']}
             </td>
           </tr>
         </table>
