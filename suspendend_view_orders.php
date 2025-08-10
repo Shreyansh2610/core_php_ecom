@@ -11,7 +11,7 @@ if (!isset($_SESSION['admin_logged_in'])) {
 $suppliers = $pdo->query("SELECT id, name FROM suppliers ORDER BY name")->fetchAll(PDO::FETCH_ASSOC);
 
 // Fetch brand list for dropdown
-$brands = $pdo->query("SELECT DISTINCT brand FROM items WHERE brand IS NOT NULL AND brand != '' ORDER BY brand")->fetchAll(PDO::FETCH_COLUMN);
+$brands = $pdo->query("SELECT * FROM brands ORDER BY brand")->fetchAll();
 
 // Handle filters
 $supplier_id = $_GET['supplier_id'] ?? '';
@@ -103,8 +103,8 @@ $statusOptions = [
             <select name="brand" id="brand" class="form-select">
                 <option value="">Tutti i marchi</option>
                 <?php foreach ($brands as $b): ?>
-                    <option value="<?= htmlspecialchars($b) ?>" <?= $brand == $b ? 'selected' : '' ?>>
-                        <?= htmlspecialchars($b) ?>
+                    <option value="<?= $b['id'] ?>" <?= $brand == $b['id'] ? 'selected' : '' ?>>
+                        <?= htmlspecialchars($b['brand']) ?>
                     </option>
                 <?php endforeach; ?>
             </select>
