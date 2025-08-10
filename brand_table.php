@@ -80,7 +80,7 @@ ADD supplier_sales_contact VARCHAR(255) NULL AFTER supplier_vat_number;
 JOIN suppliers s ON o.supplier_id = s.id
 SET o.supplier_name = s.name,o.supplier_address = s.address,o.supplier_phone = s.phone,o.supplier_email = s.email,o.supplier_vat_number = s.vat_number,o.supplier_sales_contact = s.sales_contact;
 ";
-// Execute SQL
+    // Execute SQL
     $pdo->exec($sql);
     echo "Table 'orders' updated successfully!";
 
@@ -101,6 +101,48 @@ ADD payment VARCHAR(255) NULL AFTER supplier_responsible
     $pdo->exec($sql);
     echo "Table 'suppliers' updated successfully!";
 
+    $sql = "
+    CREATE TABLE contact_details (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(255) NULL,
+        telphone VARCHAR(255) NULL,
+        cell VARCHAR(255) NULL,
+        email VARCHAR(255) NULL,
+        address TEXT NULL,
+        vat VARCHAR(50) NULL,
+        closure VARCHAR(255) NULL,
+        email_pec VARCHAR(255) NULL,
+        responsible VARCHAR(255) NULL,
+        sdi VARCHAR(255) NULL
+    );
+";
+
+    // Execute SQL
+    $pdo->exec($sql);
+    echo "Table 'contact_details' created successfully!<br>";
+
+    // Prepare and execute insert
+    $stmt = $pdo->prepare("
+    INSERT INTO contact_details 
+    (name, telphone, cell, email, address, vat, closure, email_pec, responsible, sdi) 
+    VALUES 
+    (:name, :telphone, :cell, :email, :address, :vat, :closure, :email_pec, :responsible, :sdi)
+");
+
+    $stmt->execute([
+        'name' => 'LA BOTTEGA GOLOSA DI BIANCHI TAMARA & C. S.N.C. (Interno Mercato Centrale)',
+        'telphone' => '0550541491',
+        'cell' => '3511874871',
+        'email' => 'filippo.ciapetti@labottegagolosa.it',
+        'address' => 'Via dell’Ariento (Interno Mercato Centrale) Firenze 50123',
+        'vat' => '05279070485',
+        'closure' => 'DOMENICA',
+        'email_pec' => 'labottegagolosa@cert.cna.it',
+        'responsible' => 'Filippo Ciapetti',
+        'sdi' => 'SUBM70N',
+    ]);
+
+    echo "Record added in 'contact_details' successfully!";
 } catch (PDOException $e) {
     echo "Connection failed or error creating table: " . $e->getMessage();
 }
