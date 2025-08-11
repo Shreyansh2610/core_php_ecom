@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Start with base query and parameters
     
     $sql = "UPDATE contact_details SET name=?,telphone=?,cell=?,email=?,address=?,vat=?,closure=?,email_pec=?,responsible=?,sdi=?";
-    $params = [$brand_save,$telphone,$cell,$email,$address,$vat,$closure,$email_pec,$responsible,$sdi];
+    $params = [$name,$telphone,$cell,$email,$address,$vat,$closure,$email_pec,$responsible,$sdi];
 
 
     $sql .= " WHERE id=?";
