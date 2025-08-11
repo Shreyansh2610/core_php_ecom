@@ -272,7 +272,6 @@ $brandQuery = $pdo->prepare("SELECT DISTINCT items.brand FROM order_items
 $brandQuery->execute([$order_id]);
 
 $orderBrand = $brandQuery->fetchColumn();
-var_dump($orderBrand);
 
 $itemsListQuery = $pdo->prepare("SELECT * FROM items 
     WHERE items.brand = ?");
