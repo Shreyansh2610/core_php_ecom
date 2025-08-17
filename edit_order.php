@@ -120,7 +120,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $sdi = $supplier['sdi'] ?? '';
     $iban = $supplier['iban'] ?? '';
     $agent_telephone = $supplier['agent_telphone'] ?? '';
-    
+
     $stmt = $pdo->prepare("SELECT * FROM contact_details WHERE id = ?");
     $stmt->execute([1]);
     $contact = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -348,6 +348,15 @@ if (!$order) {
             </td>
           </tr>`;
                     });
+
+                    function adjustQuantity(id, change) {
+                        const input = document.getElementById(`qty-${id}`);
+                        console.log(input);
+                        
+                        let value = parseInt(input.value ?? 0);
+                        value = Math.max(0, value + change);
+                        input.value = value;
+                    }
                 });
         }
     </script>
@@ -492,7 +501,7 @@ if (!$order) {
                         <td>
                             <div class="input-group">
                                 <button type="button" class="btn btn-outline-secondary" onclick="adjustQuantity(<?php echo $items['id']; ?>, -1)">−</button>
-                                <input type="number" id="qty-${item.id}" name="quantities[<?php echo $items['id']; ?>]" min="0" class="form-control text-center" value="<?php echo ($currentItems ? $currentItems : 0); ?>" />
+                                <input type="number" id="qty-<?php echo $items['id']; ?>" name="quantities[<?php echo $items['id']; ?>]" min="0" class="form-control text-center" value="<?php echo ($currentItems ? $currentItems : 0); ?>" />
                                 <button type="button" class="btn btn-outline-secondary" onclick="adjustQuantity(<?php echo $items['id']; ?>, 1)">+</button>
                             </div>
                         </td>

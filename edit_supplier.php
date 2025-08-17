@@ -9,7 +9,7 @@ if (!isset($_GET['id'])) {
 $id = $_GET['id'];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $stmt = $pdo->prepare("UPDATE suppliers SET name=?, address=?, phone=?, email=?, vat_number=?, sales_contact=? WHERE id=?");
+    $stmt = $pdo->prepare("UPDATE suppliers SET name=?, address=?, phone=?, email=?, vat_number=?, sales_contact=?,agent_telphone=?,sdi=?,iban=?,supplier_email=?,supplier_email_pec=?,supplier_cell=?,supplier_responsible=?,payment=? WHERE id=?");
     $stmt->execute([
         $_POST['name'],
         $_POST['address'],
@@ -17,8 +17,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_POST['email'],
         $_POST['vat_number'],
         $_POST['sales_contact'],
-        $id
+        $_POST['agent_telphone'],
+        $_POST['sdi'],
+        $_POST['iban'],
+        $_POST['supplier_email'],
+        $_POST['supplier_email_pec'],
+        $_POST['supplier_cell'],
+        $_POST['supplier_responsible'],
+        $_POST['payment'],
+        $id,
     ]);
+
     header('Location: home.php#suppliers');
     exit;
 }
