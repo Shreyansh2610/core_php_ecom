@@ -1,11 +1,13 @@
 <?php
 
+// $host = '31.11.39.239';
+// $db   = 'Sql1882760_2';
+// $user = 'Sql1882760';
+// $pass = 'K:PH:vQ6Tw:@6dSL';
 $host = 'localhost';
 $db   = 'u567802240_kdker';
-$user = 'u567802240_kdker';
-$pass = 'SdtXLH7{]c';
-// $user = 'root';
-// $pass = '';
+$user = 'root';
+$pass = '';
 $charset = 'utf8mb4';
 
 $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
