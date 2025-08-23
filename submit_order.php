@@ -119,41 +119,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <table cellpadding="4">
           <tr>
             <td width="50%" style="border: 1px solid black">
-              <strong>{$orderSupplierName}</strong><br>
-              Responsabile: {$salesResponsible}<br>
-              Tel: {$orderSupplierPhone} &nbsp;&nbsp;Cell: {$salesCell}<br>
-              Email: {$orderSupplierEmail}<br>
-              Email pec: {$salesEmailPec}<br>
-              {$orderSupplierAddress}<br>
-              IBAN: {$iban}<br>
-              Codice SDI: {$sdi}<br>
-              P.IVA: {$orderSupplierVat}<br>
+                <table border="0">
+                    <tr><td><strong>{$orderSupplierName}</strong></td></tr>
+                    <tr><td><strong>Responsabile:</strong> {$salesResponsible}</td></tr>
+                    <tr><td><strong>Tel:</strong> {$orderSupplierPhone}</td></tr>
+                    <tr><td><strong>Cell:</strong> {$salesCell}</td></tr>
+                    <tr><td><strong>Email:</strong> {$orderSupplierEmail}</td></tr>
+                    <tr><td><strong>Email pec:</strong> {$salesEmailPec}</td></tr>
+                    <tr><td><strong>{$orderSupplierAddress}</strong></td></tr>
+                    <tr><td><strong>IBAN:</strong> {$iban}</td></tr>
+                    <tr><td><strong>Codice SDI:</strong> {$sdi}</td></tr>
+                    <tr><td><strong>P.IVA:</strong> {$orderSupplierVat}</td></tr>
+                </table>
             </td>
             <td width="50%" style="border: 1px solid black">
-                <strong>{$orderSupplierSalesContact}</strong><br>
-                Tel: {$agent_telephone}<br>
-                Email: {$supplier['email']}
+                <table border="0">
+                    <tr><td><strong>{$orderSupplierSalesContact}</strong></td></tr>
+                    <tr><td><strong>Tel:</strong> {$agent_telephone}</td></tr>
+                    <tr><td><strong>Email:</strong> {$supplier['email']}</td></tr>
+                </table>
             </td>
           </tr>
           <tr>
            <td width="50%" style="border: 1px solid black">
-              <strong>Consegna:</strong> PRONTA<br>
-              <strong>Imballo:</strong><br>
-              <strong>Resa:</strong><br>
-              <strong>Spedizione:</strong><br>
-              <strong>Pagamento:</strong> BONIFICO ANTICIPATO<br>
-              <strong>Banca:</strong>
+                <table border="0">
+                    <tr><td><strong>Consegna:</strong> PRONTA</td></tr>
+                    <tr><td><strong>Imballo:</strong></td></tr>
+                    <tr><td><strong>Resa:</strong></td></tr>
+                    <tr><td><strong>Spedizione:</strong></td></tr>
+                    <tr><td><strong>Pagamento:</strong> BONIFICO ANTICIPATO</td></tr>
+                    <tr><td><strong>Banca:</strong></td></tr>
+                </table>
             </td>
             <td width="50%" style="border: 1px solid black">
-              <strong>{$contact['name']}</strong><br>
-              Tel: {$contact['telphone']} • Cell: {$contact['cell']}<br>
-              Email: {$contact['email']}<br>
-              {$contact['address']}<br>
-              P.IVA: {$contact['vat']}<br>
-              Chiusura: {$contact['closure']}<br>
-              PEC: {$contact['email_pec']}<br>
-              Resp.: {$contact['responsible']}<br>
-              Codice SDI: {$contact['sdi']}
+                <table border="0">
+                    <tr><td><strong>{$contact['name']}</strong></td></tr>
+                    <tr><td><strong>Tel:</strong> {$contact['telphone']}</td></tr>
+                    <tr><td><strong>Cell:</strong> {$contact['cell']}</td></tr>
+                    <tr><td><strong>Email:</strong> {$contact['email']}</td></tr>
+                    <tr><td><strong>Indirizzo:</strong> {$contact['address']}</td></tr>
+                    <tr><td><strong>P.IVA:</strong> {$contact['vat']}</td></tr>
+                    <tr><td><strong>Chiusura:</strong> {$contact['closure']}</td></tr>
+                    <tr><td><strong>PEC:</strong> {$contact['email_pec']}</td></tr>
+                    <tr><td><strong>Resp.:</strong> {$contact['responsible']}</td></tr>
+                    <tr><td><strong>Codice SDI:</strong> {$contact['sdi']}</td></tr>
+                </table>
             </td>
           </tr>
         </table>
