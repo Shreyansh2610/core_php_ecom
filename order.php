@@ -42,17 +42,17 @@ if (isset($_GET['success']) && $_GET['success'] == 1) {
       //   });
       // get_supplier_data_by_supplier
 
-      fetch(`get_supplier_data_by_supplier.php?supplier_id=${supplierId}`)
-        .then(res => res.json())
-        .then(data => {
-          console.log(data)
-          document.querySelector('[name="order_supplier_name"]').value = data['name'] ?? '';
-          document.querySelector('[name="order_supplier_address"]').value = data['address'] ?? '';
-          document.querySelector('[name="order_supplier_email"]').value = data['email'] ?? '';
-          document.querySelector('[name="order_supplier_phone"]').value = data['phone'] ?? '';
-          document.querySelector('[name="order_supplier_vat"]').value = data['vat_number'] ?? '';
-          document.querySelector('[name="order_supplier_sales_contact"]').value = data['sales_contact'] ?? '';
-        });
+      // fetch(`get_supplier_data_by_supplier.php?supplier_id=${supplierId}`)
+      //   .then(res => res.json())
+      //   .then(data => {
+      //     console.log(data)
+      //     document.querySelector('[name="order_supplier_name"]').value = data['name'] ?? '';
+      //     document.querySelector('[name="order_supplier_address"]').value = data['address'] ?? '';
+      //     document.querySelector('[name="order_supplier_email"]').value = data['email'] ?? '';
+      //     document.querySelector('[name="order_supplier_phone"]').value = data['phone'] ?? '';
+      //     document.querySelector('[name="order_supplier_vat"]').value = data['vat_number'] ?? '';
+      //     document.querySelector('[name="order_supplier_sales_contact"]').value = data['sales_contact'] ?? '';
+      //   });
     }
 
     function fetchItemsByBrand(brandName) {
@@ -119,16 +119,16 @@ if (isset($_GET['success']) && $_GET['success'] == 1) {
   <form action="submit_order.php" method="POST">
     <div class="mb-3">
 
-      <label for="supplier" class="form-label">Seleziona fornitore</label>
+      <label for="supplier" class="form-label">Seleziona Commerciale</label>
       <select name="supplier_id" id="supplier" class="form-select" required onchange="fetchBrands(this.value)">
-        <option value="">-- Seleziona fornitore --</option>
+        <option value="">-- Seleziona Commerciale --</option>
         <?php foreach ($suppliers as $supplier): ?>
           <option value="<?= $supplier['id'] ?>"><?= htmlspecialchars($supplier['name']) ?></option>
         <?php endforeach; ?>
       </select>
     </div>
 
-    <div class="mb-3">
+    <!-- <div class="mb-3">
       <label class="form-label">Nome del fornitore</label>
       <input type="text" name="order_supplier_name" class="form-control" required>
     </div>
@@ -152,12 +152,12 @@ if (isset($_GET['success']) && $_GET['success'] == 1) {
     <div class="mb-3">
       <label class="form-label">Contatto vendite fornitore</label>
       <input type="text" name="order_supplier_sales_contact" class="form-control" required>
-    </div>
+    </div> -->
 
     <div class="mb-3">
-      <label for="brand" class="form-label">Seleziona Marca</label>
+      <label for="brand" class="form-label">Seleziona Azienda</label>
       <select name="brand" id="brand" class="form-select" required onchange="fetchItemsByBrand(this.value)">
-        <option value="">-- Seleziona Marca --</option>
+        <option value="">-- Seleziona Azienda --</option>
         <?php foreach ($brands as $brand): ?>
           <option value="<?= $brand['id'] ?>"><?= htmlspecialchars($brand['brand']) ?></option>
         <?php endforeach; ?>
