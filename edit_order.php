@@ -195,13 +195,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $html .= "<h3>Prodotti</h3>";
     $html .= "<table border='1' cellpadding='4' cellspacing='0' width='100%'>
             <thead style='background:#D3D3D3'>
+                
               <tr>
-                <th width='15%'>SKU</th>
-                <th width='30%'>Nome del prodotto</th>
-                <th width='5%'>Unità/Scatola</th>
-                <th width='5%'>Scatole</th>
-                <th width='25%'>Marca</th>
-                <th width='20%'>Immagine</th>
+                <th width='20%'>ARTICOLO / SKU</th>
+                <th width='60%' colspan='2'>DESCIZIONE</th>
+                <th>PZ COLLI</th>
+                <th>COLLI</th>
               </tr>
              </thead>
           </table>";
@@ -219,7 +218,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
 
-    $html = "<table border='1' cellpadding='4' cellspacing='0' width='100%'><tbody>";
+    $html = "<table border='1' cellpadding='4' cellspacing='0' width='100%'>
+    <tbody>";
 
     foreach ($orderItems as $item) {
         $imagePath = $item['image'] ? 'uploads/' . $item['image'] : ''; // full path
@@ -230,12 +230,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             : 'N/A';
 
         $html .= "<tr>
-                <td width='15%'>{$item['sku']}</td>
-                <td width='30%'>{$item['name']}</td>
-                <td width='5%'>{$item['units_per_box']}</td>
-                <td width='5%'>{$item['box_requested']}</td>
-                <td width='25%'>{$item['brand']}</td>
-                <td width='20%'>{$imageHtml}</td>
+                <td width='20%'>{$item['sku']}</td>
+                <td width='60%' colspan='2'>{$item['name']}</td>
+                <td width='10%'>{$item['box_requested']}</td>
+                <td width='10%'></td>
               </tr>";
     }
 

@@ -186,12 +186,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $html .= "<table border='1' cellpadding='4' cellspacing='0' width='100%'>
             <thead style='background:#D3D3D3'>
               <tr>
-                <th width='15%'>SKU</th>
-                <th width='30%'>Nome del prodotto</th>
-                <th width='5%'>Unità/Scatola</th>
-                <th width='5%'>Scatole</th>
-                <th width='25%'>Marca</th>
-                <th width='20%'>Immagine</th>
+                <th style='width:20%'>ARTICOLO / SKU</th>
+                <th style='width:60%'>DESCIZIONE</th>
+                <th width='10%'>PZ COLLI</th>
+                <th width='10%'>COLLI</th>
               </tr>
              </thead>
           </table>";
@@ -219,13 +217,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ? '<img src="' . $imagePath . '" height="40">'
                 : 'N/A';
 
+            // $html .= "<tr>
+            //     <td width='15%'>{$item['sku']}</td>
+            //     <td width='30%'>{$item['name']}</td>
+            //     <td width='5%'>{$item['units_per_box']}</td>
+            //     <td width='5%'>{$item['box_requested']}</td>
+            //     <td width='25%'>{$item['brand']}</td>
+            //     <td width='20%'>{$imageHtml}</td>
+            //   </tr>";
             $html .= "<tr>
-                <td width='15%'>{$item['sku']}</td>
-                <td width='30%'>{$item['name']}</td>
-                <td width='5%'>{$item['units_per_box']}</td>
-                <td width='5%'>{$item['box_requested']}</td>
-                <td width='25%'>{$item['brand']}</td>
-                <td width='20%'>{$imageHtml}</td>
+                <td width='20%'>{$item['sku']}</td>
+                <td width='60%'>{$item['name']}</td>
+                <td width='10%'>{$item['box_requested']}</td>
+                <td width='10%'></td>
               </tr>";
         }
 
