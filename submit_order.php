@@ -1,11 +1,12 @@
 <?php
 require 'config.php';
 require 'vendor/autoload.php'; // Ensure Composer's autoload is included
-
+use Dompdf\Dompdf;
+use Dompdf\Options;
 //use PHPMailer\PHPMailer\PHPMailer;
 //use PHPMailer\PHPMailer\Exception;
 //use Twilio\Rest\Client;
-use TCPDF;
+
 
 session_start();
 
@@ -93,151 +94,115 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
-        // Generate PDF
-        $pdf = new TCPDF();
-        $pdf->AddPage();
+        // ============ DOMPDF START ============
+        $options = new Options();
+        $options->set('isHtml5ParserEnabled', true);
+        $options->set('isRemoteEnabled', true); // for external images
+        $dompdf = new Dompdf($options);
 
-        // --- build your HTML in order --- //
-        $html  = "";
+        // Build your HTML
+        $html = "<h1>Ordine n. {$order_number} del " . date('d/m/Y', strtotime($order_date)) . "</h1><hr>";
 
-        // 1) Big header: order number and date
-        $html .= "<h1>Ordine n. {$order_number} del " . date('d/m/Y', strtotime($order_date)) . "</h1>";
-        $salesResponsible = $supplier['supplier_responsible']??'';
-        $salesCell = $supplier['supplier_cell']??'';
-        $salesEmailPec = $supplier['supplier_email_pec']??'';
-        $sdi = $supplier['sdi']??'';
-        $iban = $supplier['iban']??'';
-        $agent_telephone = $supplier['agent_telphone']??'';
+        $salesResponsible = $supplier['supplier_responsible'] ?? '';
+        $salesCell        = $supplier['supplier_cell'] ?? '';
+        $salesEmailPec    = $supplier['supplier_email_pec'] ?? '';
+        $sdi              = $supplier['sdi'] ?? '';
+        $iban             = $supplier['iban'] ?? '';
+        $agent_telephone  = $supplier['agent_telphone'] ?? '';
 
         $stmt = $pdo->prepare("SELECT * FROM contact_details WHERE id = ?");
         $stmt->execute([1]);
         $contact = $stmt->fetch(PDO::FETCH_ASSOC);
 
-
-        // 2) Supplier & Client Info Grid with dynamic supplier info
         $html .= <<<HTML
-        <table cellpadding="4">
+        <style>td, th { text-align:left; vertical-align:top; }</style>
+        <table  border="1" cellspacing='0' width="100%">
           <tr>
-            <td width="50%" style="border: 1px solid black">
-                <table border="0">
-                    <tr><td><strong>{$orderSupplierName}</strong></td></tr>
-                    <tr><td><strong>Responsabile:</strong> {$salesResponsible}</td></tr>
-                    <tr><td><strong>Tel:</strong> {$orderSupplierPhone}</td></tr>
-                    <tr><td><strong>Cell:</strong> {$salesCell}</td></tr>
-                    <tr><td><strong>Email:</strong> {$orderSupplierEmail}</td></tr>
-                    <tr><td><strong>Email pec:</strong> {$salesEmailPec}</td></tr>
-                    <tr><td><strong>{$orderSupplierAddress}</strong></td></tr>
-                    <tr><td><strong>IBAN:</strong> {$iban}</td></tr>
-                    <tr><td><strong>Codice SDI:</strong> {$sdi}</td></tr>
-                    <tr><td><strong>P.IVA:</strong> {$orderSupplierVat}</td></tr>
-                </table>
+            <td width="50%" style="padding:3px">
+                <strong>{$orderSupplierName}</strong><br>
+                Responsabile: {$salesResponsible}<br>
+                Tel: {$orderSupplierPhone}<br>
+                Cell: {$salesCell}<br>
+                Email: {$orderSupplierEmail}<br>
+                Email pec: {$salesEmailPec}<br>
+                {$orderSupplierAddress}<br>
+                IBAN: {$iban}<br>
+                Codice SDI: {$sdi}<br>
+                P.IVA: {$orderSupplierVat}
             </td>
-            <td width="50%" style="border: 1px solid black">
-                <table border="0">
-                    <tr><td><strong>{$orderSupplierSalesContact}</strong></td></tr>
-                    <tr><td><strong>Tel:</strong> {$agent_telephone}</td></tr>
-                    <tr><td><strong>Email:</strong> {$supplier['email']}</td></tr>
-                </table>
+            <td width="50%" style="padding:3px">
+                <b>{$orderSupplierSalesContact}</b><br>
+                Tel: {$agent_telephone}<br>
+                Email: {$supplier['email']}
             </td>
           </tr>
           <tr>
-           <td width="50%" style="border: 1px solid black">
-                <table border="0">
-                    <tr><td><strong>Consegna:</strong> PRONTA</td></tr>
-                    <tr><td><strong>Imballo:</strong></td></tr>
-                    <tr><td><strong>Resa:</strong></td></tr>
-                    <tr><td><strong>Spedizione:</strong></td></tr>
-                    <tr><td><strong>Pagamento:</strong> BONIFICO ANTICIPATO</td></tr>
-                    <tr><td><strong>Banca:</strong></td></tr>
-                </table>
+            <td width="50%" style="padding:3px">
+                Consegna: PRONTA<br>
+                Imballo:<br>
+                Resa:<br>
+                Spedizione:<br>
+                Pagamento: BONIFICO ANTICIPATO<br>
+                Banca:
             </td>
-            <td width="50%" style="border: 1px solid black">
-                <table border="0">
-                    <tr><td><strong>{$contact['name']}</strong></td></tr>
-                    <tr><td><strong>Tel:</strong> {$contact['telphone']}</td></tr>
-                    <tr><td><strong>Cell:</strong> {$contact['cell']}</td></tr>
-                    <tr><td><strong>Email:</strong> {$contact['email']}</td></tr>
-                    <tr><td><strong>Indirizzo:</strong> {$contact['address']}</td></tr>
-                    <tr><td><strong>P.IVA:</strong> {$contact['vat']}</td></tr>
-                    <tr><td><strong>Chiusura:</strong> {$contact['closure']}</td></tr>
-                    <tr><td><strong>PEC:</strong> {$contact['email_pec']}</td></tr>
-                    <tr><td><strong>Resp.:</strong> {$contact['responsible']}</td></tr>
-                    <tr><td><strong>Codice SDI:</strong> {$contact['sdi']}</td></tr>
-                </table>
+            <td width="50%" style="padding:3px">
+                <strong>{$contact['name']}</strong><br>
+                Tel: {$contact['telphone']}<br>
+                Cell: {$contact['cell']}<br>
+                Email: {$contact['email']}<br>
+                Indirizzo: {$contact['address']}<br>
+                P.IVA: {$contact['vat']}<br>
+                Chiusura: {$contact['closure']}<br>
+                PEC: {$contact['email_pec']}<br>
+                Resp.: {$contact['responsible']}<br>
+                Codice SDI: {$contact['sdi']}
             </td>
           </tr>
         </table>
-        HTML;
+    HTML;
 
         // 3) Brand + Notes
         if (!empty($brand)) {
             $stmt = $pdo->prepare("SELECT * FROM brands WHERE id = ?");
-        $stmt->execute([$brand]);
-        $brandData = $stmt->fetch(PDO::FETCH_ASSOC);
+            $stmt->execute([$brand]);
+            $brandData = $stmt->fetch(PDO::FETCH_ASSOC);
             $html .= "<p><strong>Brand:</strong> " . htmlspecialchars($brandData['brand']) . "</p>";
         }
+
         $html .= "<p><strong>Notes:</strong> {$notes}</p>";
-        $totalOrders = count($orderItems);
-        $html .= "<p><strong>Ordini totali:</strong> {$totalOrders}</p>";
+        $html .= "<p><strong>Ordini totali:</strong> " . count($orderItems) . "</p>";
 
-        // 4) Items table
-
-        $html .= "<h3>Prodotti</h3>";
-        $html .= "<table border='1' cellpadding='4' cellspacing='0' width='100%'>
-            <thead style='background:#D3D3D3'>
-              <tr>
-                <th style='width:20%'>ARTICOLO / SKU</th>
-                <th style='width:60%'>DESCIZIONE</th>
-                <th width='10%'>PZ COLLI</th>
-                <th width='10%'>COLLI</th>
-              </tr>
-             </thead>
-          </table>";
-        $pdf->writeHTML($html, true, false, true, false, '');
-
-        // Get current position (X/Y) after header
-        $x = $pdf->GetX();
-        $y = $pdf->GetY();
-
-        // Draw a horizontal line
-        $pdf->Line($x, $y, $x + 190, $y); // 190 = width of line in mm
-        $pdf->Ln(2); // Move down a bit for spacing
-
-
-
-
-
-        $html = "<table border='1' cellpadding='4' cellspacing='0' width='100%'><tbody>";
+        $html .= "<h3>Prodotti</h3>
+              <table border='1' cellpadding='4' cellspacing='0' width='100%'>
+                <thead style='background:#D3D3D3'>
+                  <tr>
+                    <th width='20%'>ARTICOLO / SKU</th>
+                    <th width='60%' colspan='2'>DESCIZIONE</th>
+                    <th width='10%'>PZ COLLI</th>
+                    <th width='10%'>COLLI</th>
+                  </tr>
+                </thead>
+                <tbody>";
 
         foreach ($orderItems as $item) {
-            $imagePath = $item['image'] ? 'uploads/' . $item['image'] : ''; // full path
-
-            // Resize image HTML if available
-            $imageHtml = $imagePath && file_exists($imagePath)
+            $imagePath = $item['image'] ? 'uploads/' . $item['image'] : '';
+            $imageHtml = ($imagePath && file_exists($imagePath))
                 ? '<img src="' . $imagePath . '" height="40">'
                 : 'N/A';
 
-            // $html .= "<tr>
-            //     <td width='15%'>{$item['sku']}</td>
-            //     <td width='30%'>{$item['name']}</td>
-            //     <td width='5%'>{$item['units_per_box']}</td>
-            //     <td width='5%'>{$item['box_requested']}</td>
-            //     <td width='25%'>{$item['brand']}</td>
-            //     <td width='20%'>{$imageHtml}</td>
-            //   </tr>";
             $html .= "<tr>
-                <td width='20%'>{$item['sku']}</td>
-                <td width='60%'>{$item['name']}</td>
-                <td width='10%'>{$item['box_requested']}</td>
-                <td width='10%'></td>
-              </tr>";
+                    <td>{$item['sku']}</td>
+                    <td colspan='2'>{$item['name']}</td>
+                    <td>{$item['box_requested']}</td>
+                    <td></td>
+                  </tr>";
         }
 
         $html .= "</tbody></table>";
-        $pdf->writeHTML($html, true, false, true, false, '');
 
-
-
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A4', 'portrait');
+        $dompdf->render();
 
         // Save PDF to orders_pdf/ folder with unique filename
         $timestamp = time();
@@ -249,7 +214,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             mkdir($saveDir, 0755, true);
         }
         $pdfFilePath = $saveDir . '/' . $pdfFileName;
-        $pdf->Output($pdfFilePath, 'F');
+        file_put_contents($pdfFilePath, $dompdf->output());
 
         // Save pdf_filename to orders table
         $updateStmt = $pdo->prepare("UPDATE orders SET pdf_filename = ? WHERE id = ?");
