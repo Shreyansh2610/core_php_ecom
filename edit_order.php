@@ -340,7 +340,11 @@ if (!$order) {
     </style>
 </head>
 
-<body class="container mt-4">
+<body class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <a href="view_orders.php" class="btn btn-outline-secondary">Visualizza ordini</a>
+        <a href="./home.php" class="btn btn-secondary">Torna alla Home</a>
+    </div>
     <h2>Modifica Stato Ordine #<?= htmlspecialchars($order['order_number']) ?></h2>
     <form method="POST">
         <div class="mb-3">
@@ -428,50 +432,51 @@ if (!$order) {
 
 
         <h5>Elementi</h5>
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>Immagine</th>
-                    <th>SKU</th>
-                    <th>Nome del prodotto</th>
-                    <th>Unità/Scatola</th>
-                    <th>Scatola richiesta</th>
-                </tr>
-            </thead>
-            <tbody id="item_list">
-                <?php foreach ($itemsLists as $items): ?>
-                    <?php
-                    $currentItemsQuery = $pdo->prepare("SELECT box_requested FROM order_items WHERE order_items.order_id = ? AND order_items.item_id = ?");
-
-                    $currentItemsQuery->execute([$order_id, $items['id']]);
-
-                    $currentItems = $currentItemsQuery->fetchColumn();
-                    ?>
+        <div class="table-responsive">
+            <table class="table table-bordered" style="min-width:1000px">
+                <thead>
                     <tr>
-                        <td>
-                            <?php if (isset($items['image'])): ?>
-                                <img src="uploads/<?php echo $items['image']; ?>" alt="Item Image" style="width: 60px; height: 60px;">
-                            <?php else: ?>
-                                <span class="text-muted">Nessuna immagine</span>
-                            <?php endif ?>
-                        </td>
-                        <td><?php echo $items['sku']; ?></td>
-                        <td><?php echo $items['name']; ?></td>
-                        <td><?php echo $items['units_per_box']; ?></td>
-                        <td>
-                            <div class="input-group">
-                                <button type="button" class="btn btn-outline-secondary" onclick="adjustQuantity(<?php echo $items['id']; ?>, -1)">−</button>
-                                <input type="number" id="qty-<?php echo $items['id']; ?>" name="quantities[<?php echo $items['id']; ?>]" min="0" class="form-control text-center" value="<?php echo ($currentItems ? $currentItems : 0); ?>" />
-                                <button type="button" class="btn btn-outline-secondary" onclick="adjustQuantity(<?php echo $items['id']; ?>, 1)">+</button>
-                            </div>
-                        </td>
+                        <th>Immagine</th>
+                        <th>SKU</th>
+                        <th>Nome del prodotto</th>
+                        <th>Unità/Scatola</th>
+                        <th>Scatola richiesta</th>
                     </tr>
-                <?php endforeach; ?>
-            </tbody>
+                </thead>
+                <tbody id="item_list">
+                    <?php foreach ($itemsLists as $items): ?>
+                        <?php
+                        $currentItemsQuery = $pdo->prepare("SELECT box_requested FROM order_items WHERE order_items.order_id = ? AND order_items.item_id = ?");
 
-        </table>
-        <button type="submit" class="btn btn-primary">Aggiornamento</button>
-        <a href="view_orders.php" class="btn btn-secondary">Annulla</a>
+                        $currentItemsQuery->execute([$order_id, $items['id']]);
+
+                        $currentItems = $currentItemsQuery->fetchColumn();
+                        ?>
+                        <tr>
+                            <td>
+                                <?php if (isset($items['image'])): ?>
+                                    <img src="uploads/<?php echo $items['image']; ?>" alt="Item Image" style="width: 60px; height: 60px;">
+                                <?php else: ?>
+                                    <span class="text-muted">Nessuna immagine</span>
+                                <?php endif ?>
+                            </td>
+                            <td><?php echo $items['sku']; ?></td>
+                            <td><?php echo $items['name']; ?></td>
+                            <td><?php echo $items['units_per_box']; ?></td>
+                            <td>
+                                <div class="input-group">
+                                    <button type="button" class="btn btn-outline-secondary" onclick="adjustQuantity(<?php echo $items['id']; ?>, -1)">−</button>
+                                    <input type="number" id="qty-<?php echo $items['id']; ?>" name="quantities[<?php echo $items['id']; ?>]" min="0" class="form-control text-center" value="<?php echo ($currentItems ? $currentItems : 0); ?>" />
+                                    <button type="button" class="btn btn-outline-secondary" onclick="adjustQuantity(<?php echo $items['id']; ?>, 1)">+</button>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+        <button type="submit" class="btn btn-primary my-5">Aggiornamento</button>
+        <a href="view_orders.php" class="btn btn-secondary my-5">Annulla</a>
     </form>
 </body>
 

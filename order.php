@@ -192,21 +192,21 @@ if (isset($_GET['success']) && $_GET['success'] == 1) {
 
 
     <h5>Elementi</h5>
-    <table class="table table-bordered">
-      <thead>
-        <tr>
-          <th>Immagine</th>
-          <th>SKU</th>
-          <th>Nome del prodotto</th>
-          <th>Unità/Scatola</th>
-          <th>Scatola richiesta</th>
-        </tr>
-      </thead>
-      <tbody id="item_list"></tbody>
-
-    </table>
-
-    <button type="submit" class="btn btn-primary">Invia ordine</button>
+      <div class="table-responsive">
+        <table class="table table-bordered" style="min-width:1000px">
+          <thead>
+            <tr>
+              <th>Immagine</th>
+              <th>SKU</th>
+              <th>Nome del prodotto</th>
+              <th>Unità/Scatola</th>
+              <th>Scatola richiesta</th>
+            </tr>
+          </thead>
+          <tbody id="item_list"></tbody>
+        </table>
+      </div>
+    <button type="submit" class="btn btn-primary my-5">Invia ordine</button>
   </form>
 </body>
 
