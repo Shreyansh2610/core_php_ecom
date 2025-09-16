@@ -25,15 +25,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'];
     $address = $_POST['address'];
     $vat = $_POST['vat'];
-    $closure = $_POST['closure'];
+    // $closure = $_POST['closure'];
+    // $closure = $_POST['upload_time'];
     $email_pec = $_POST['email_pec'];
     $responsible = $_POST['responsible'];
     $sdi = $_POST['sdi'];
 
     // Start with base query and parameters
     
-    $sql = "UPDATE contact_details SET name=?,telphone=?,cell=?,email=?,address=?,vat=?,closure=?,email_pec=?,responsible=?,sdi=?";
-    $params = [$name,$telphone,$cell,$email,$address,$vat,$closure,$email_pec,$responsible,$sdi];
+    $sql = "UPDATE contact_details SET name=?,telphone=?,cell=?,email=?,address=?,vat=?,upload_time=?,email_pec=?,responsible=?,sdi=?";
+    $params = [$name,$telphone,$cell,$email,$address,$vat,$uploadTime,$email_pec,$responsible,$sdi];
 
 
     $sql .= " WHERE id=?";
@@ -64,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <input type="text" name="email" class="form-control mb-2" value="<?= htmlspecialchars($contact['email']) ?>" placeholder="Email" required>
         <input type="text" name="address" class="form-control mb-2" value="<?= htmlspecialchars($contact['address']) ?>" placeholder="Indirizzo" required>
         <input type="text" name="vat" class="form-control mb-2" value="<?= htmlspecialchars($contact['vat']) ?>" placeholder="IVA" required>
-        <input type="text" name="closure" class="form-control mb-2" value="<?= htmlspecialchars($contact['closure']) ?>" placeholder="chiusura" required>
+        <input type="text" name="contact_details" class="form-control mb-2" value="<?= htmlspecialchars($contact['contact_details']??'') ?>" placeholder="Orario scarico merce" required>
         <input type="text" name="email_pec" class="form-control mb-2" value="<?= htmlspecialchars($contact['email_pec']) ?>" placeholder="Email PEC" required>
         <input type="text" name="responsible" class="form-control mb-2" value="<?= htmlspecialchars($contact['responsible']) ?>" placeholder="Responsabile" required>
         <input type="text" name="sdi" class="form-control mb-2" value="<?= htmlspecialchars($contact['sdi']) ?>" placeholder="SDI" required>
