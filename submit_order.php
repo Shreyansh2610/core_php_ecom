@@ -117,47 +117,48 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $html .= <<<HTML
         <style>td, th { text-align:left; vertical-align:top; }</style>
         <table  border="1" cellspacing='0' width="100%">
-          <tr>
-            <td width="50%" style="padding:3px">
-                <strong>{$orderSupplierName}</strong><br>
-                Responsabile: {$salesResponsible}<br>
-                Tel: {$orderSupplierPhone}<br>
-                Cell: {$salesCell}<br>
-                Email: {$orderSupplierEmail}<br>
-                Email pec: {$salesEmailPec}<br>
-                {$orderSupplierAddress}<br>
-                IBAN: {$iban}<br>
-                Codice SDI: {$sdi}<br>
-                P.IVA: {$orderSupplierVat}
-            </td>
-            <td width="50%" style="padding:3px">
-                <b>{$orderSupplierSalesContact}</b><br>
-                Tel: {$agent_telephone}<br>
-                Email: {$supplier['email']}
-            </td>
-          </tr>
-          <tr>
-            <td width="50%" style="padding:3px">
-                Consegna: PRONTA<br>
-                Imballo:<br>
-                Resa:<br>
-                Spedizione:<br>
-                Pagamento: BONIFICO ANTICIPATO<br>
-                Banca:
-            </td>
-            <td width="50%" style="padding:3px">
-                <strong>{$contact['name']}</strong><br>
-                Tel: {$contact['telphone']}<br>
-                Cell: {$contact['cell']}<br>
-                Email: {$contact['email']}<br>
-                Indirizzo: {$contact['address']}<br>
-                P.IVA: {$contact['vat']}<br>
-                Chiusura: {$contact['closure']}<br>
-                PEC: {$contact['email_pec']}<br>
-                Resp.: {$contact['responsible']}<br>
-                Codice SDI: {$contact['sdi']}
-            </td>
-          </tr>
+            <tr>
+                <td width="50%" style="padding:3px">
+                    <strong>{$contact['name']}</strong><br>
+                    Tel: {$contact['telphone']}<br>
+                    Cell: {$contact['cell']}<br>
+                    Email: {$contact['email']}<br>
+                    Indirizzo: {$contact['address']}<br>
+                    P.IVA: {$contact['vat']}<br>
+                    <!-- Chiusura: {$contact['closure']}<br> -->
+                    Orario scarico merce: {$contact['upload_time']}<br>
+                    PEC: {$contact['email_pec']}<br>
+                    Resp.: {$contact['responsible']}<br>
+                    Codice SDI: {$contact['sdi']}
+                </td>
+                <td width="50%" style="padding:3px">
+                    Consegna: PRONTA<br>
+                    Imballo:<br>
+                    Resa:<br>
+                    Spedizione:<br>
+                    Pagamento: BONIFICO ANTICIPATO<br>
+                    Banca:
+                </td>
+            </tr>
+            <tr>
+                <td width="50%" style="padding:3px">
+                    <strong>{$orderSupplierName}</strong><br>
+                    Responsabile: {$salesResponsible}<br>
+                    Tel: {$orderSupplierPhone}<br>
+                    Cell: {$salesCell}<br>
+                    Email: {$orderSupplierEmail}<br>
+                    Email pec: {$salesEmailPec}<br>
+                    {$orderSupplierAddress}<br>
+                    IBAN: {$iban}<br>
+                    Codice SDI: {$sdi}<br>
+                    P.IVA: {$orderSupplierVat}
+                </td>
+                <td width="50%" style="padding:3px">
+                    <b>{$orderSupplierSalesContact}</b><br>
+                    Tel: {$agent_telephone}<br>
+                    Email: {$supplier['email']}
+                </td>
+            </tr>
         </table>
     HTML;
 
