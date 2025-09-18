@@ -168,7 +168,7 @@ $statusOptions = [
                         <tr>
                             <th>Articolo</th>
                             <th>SKU</th>
-                            <th>Marca</th>
+                            <!-- <th>Marca</th> -->
                             <th>Unità/Scatola</th>
                             <th>Scatole ordinate</th>
                         </tr>
@@ -188,7 +188,7 @@ $statusOptions = [
                             <tr>
                                 <td><?= htmlspecialchars($item['name']) ?></td>
                                 <td><?= htmlspecialchars($item['sku']) ?></td>
-                                <td><?= htmlspecialchars($item['brand']) ?></td>
+                                <!-- <td><?= htmlspecialchars($item['brand']) ?></td> -->
                                 <td><?= htmlspecialchars($item['units_per_box']) ?></td>
                                 <td><?= htmlspecialchars($item['box_requested']) ?></td>
                             </tr>
