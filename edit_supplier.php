@@ -70,7 +70,7 @@ if (!$supplier) {
             <input type="text" name="supplier_responsible" class="form-control mb-2" placeholder="Responsabile" value="<?= htmlspecialchars($supplier['supplier_responsible']) ?>">
             <input type="text" name="payment" class="form-control mb-2" placeholder="Pagamento" value="<?= htmlspecialchars($supplier['payment']) ?>">
             <button type="submit" placeholder="Rappresentante vendite" class="btn btn-success">Aggiorna fornitore</button>
-            <a href="home.php#suppliers" class="btn btn-secondary">Cancellare</a>
+            <a href="home.php#suppliers" class="btn btn-secondary">Annulla</a>
         </form>
     </div>
 </body>
