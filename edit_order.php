@@ -112,6 +112,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->execute([1]);
     $contact = $stmt->fetch(PDO::FETCH_ASSOC);
 
+    $stmt = $pdo->prepare("SELECT * FROM brands WHERE id = ?");
+    $stmt->execute([$brand]);
+    $brandData = $stmt->fetch(PDO::FETCH_ASSOC);
+
     $html .= <<<HTML
         <style>td, th { text-align:left; vertical-align:top; }</style>
         <table  border="1" cellspacing='0' width="100%">
@@ -152,20 +156,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     P.IVA: {$orderSupplierVat}
                 </td>
                 <td width="50%" style="padding:3px">
-                    <b>{$orderSupplierSalesContact}</b><br>
-                    Tel: {$agent_telephone}<br>
-                    Email: {$supplier['email']}
+                    <strong>{$brandData['brand']}</strong><br>
+                    Tel: {$brandData['telephone']}<br>
+                    Cell: {$brandData['mobile']}<br>
+                    Email: {$brandData['email']}<br>
+                    Indririzzo: {$brandData['address_1']}<br>
+                    Indririzzo: {$brandData['address_2']}<br>
+                    IBAN: {$brandData['iban']}<br>
+                    Codice SDI: {$brandData['sdi']}<br>
+                    P.IVA: {$brandData['vat']}
                 </td>
             </tr>
         </table>
     HTML;
 
-    if (!empty($brand)) {
-        $stmt = $pdo->prepare("SELECT * FROM brands WHERE id = ?");
-        $stmt->execute([$brand]);
-        $brandData = $stmt->fetch(PDO::FETCH_ASSOC);
-        $html .= "<p><strong>Brand:</strong> " . htmlspecialchars($brandData['brand']) . "</p>";
-    }
+    
 
     $html .= "<p><strong>Notes:</strong> {$notes}</p>";
     $html .= "<p><strong>Ordini totali:</strong> " . count($orderItems) . "</p>";
@@ -396,9 +401,9 @@ if (!$order) {
         </div> -->
 
         <div class="mb-3">
-            <label for="brand" class="form-label">Seleziona Azienda</label>
+            <label for="brand" class="form-label">Seleziona agenzia</label>
             <select name="brand" id="brand" class="form-select" required onchange="fetchItemsByBrand(this.value)">
-                <option value="">-- Seleziona Azienda --</option>
+                <option value="">-- Seleziona agenzia --</option>
                 <?php foreach ($brands as $brand): ?>
                     <option value="<?= $brand['id'] ?>" <?= $brand['id'] == $orderBrand ? 'selected' : '' ?>><?= htmlspecialchars($brand['brand']) ?></option>
                 <?php endforeach; ?>

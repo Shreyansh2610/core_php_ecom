@@ -195,9 +195,9 @@ if (isset($_GET['success']) && $_GET['success'] == 1) {
     </div> -->
 
       <div class="mb-3">
-        <label for="brand" class="form-label">Seleziona Azienda</label>
+        <label for="brand" class="form-label">Seleziona agenzia</label>
         <select name="brand" id="brand" class="form-select" required onchange="fetchItemsByBrand(this.value)">
-          <option value="">-- Seleziona Azienda --</option>
+          <option value="">-- Seleziona agenzia --</option>
           <?php foreach ($brands as $brand): ?>
             <option value="<?= $brand['id'] ?>"><?= htmlspecialchars($brand['brand']) ?></option>
           <?php endforeach; ?>

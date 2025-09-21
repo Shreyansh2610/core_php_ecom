@@ -114,6 +114,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->execute([1]);
         $contact = $stmt->fetch(PDO::FETCH_ASSOC);
 
+        // 3) Brand + Notes
+        $stmt = $pdo->prepare("SELECT * FROM brands WHERE id = ?");
+            $stmt->execute([$brand]);
+            $brandData = $stmt->fetch(PDO::FETCH_ASSOC);
+            // $html .= "<p><strong>Brand:</strong> " . htmlspecialchars($brandData['brand']) . "</p>";
+
         $html .= <<<HTML
         <style>td, th { text-align:left; vertical-align:top; }</style>
         <table  border="1" cellspacing='0' width="100%">
@@ -154,21 +160,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     P.IVA: {$orderSupplierVat}
                 </td>
                 <td width="50%" style="padding:3px">
-                    <b>{$orderSupplierSalesContact}</b><br>
-                    Tel: {$agent_telephone}<br>
-                    Email: {$supplier['email']}
+                    <strong>{$brandData['brand']}</strong><br>
+                    Tel: {$brandData['telephone']}<br>
+                    Cell: {$brandData['mobile']}<br>
+                    Email: {$brandData['email']}<br>
+                    Indririzzo: {$brandData['address_1']}<br>
+                    Indririzzo: {$brandData['address_2']}<br>
+                    IBAN: {$brandData['iban']}<br>
+                    Codice SDI: {$brandData['sdi']}<br>
+                    P.IVA: {$brandData['vat']}
                 </td>
             </tr>
         </table>
     HTML;
 
-        // 3) Brand + Notes
-        if (!empty($brand)) {
-            $stmt = $pdo->prepare("SELECT * FROM brands WHERE id = ?");
-            $stmt->execute([$brand]);
-            $brandData = $stmt->fetch(PDO::FETCH_ASSOC);
-            $html .= "<p><strong>Brand:</strong> " . htmlspecialchars($brandData['brand']) . "</p>";
-        }
+        
 
         $html .= "<p><strong>Notes:</strong> {$notes}</p>";
         $html .= "<p><strong>Ordini totali:</strong> " . count($orderItems) . "</p>";
