@@ -78,6 +78,45 @@ $statusOptions = [
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
+    <nav class="navbar navbar-expand-lg bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="home.php">Benvenuto amministratore</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="home.php">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="order.php">creare nuovo ordine</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="home.php">Commerciale</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="product_list.php">Prodotti</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="brand_list.php">Azienda</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="categories.php">Categorie</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="view_orders.php">Visualizza ordini</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="suspendend_view_orders.php">Ordine sospeso</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="edit_contact.php?id=1">Contatto</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2 class="mb-0">Ordine sospeso</h2>

@@ -107,28 +107,68 @@ if (isset($_GET['success']) && $_GET['success'] == 1) {
 
 </head>
 
-<body class="container py-5">
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <a href="view_orders.php" class="btn btn-outline-secondary">Visualizza ordini</a>
-    <a href="./home.php" class="btn btn-secondary">Torna alla Home</a>
-  </div>
-
-
-
-  <h2>Crea ordine</h2>
-  <form action="submit_order.php" method="POST">
-    <div class="mb-3">
-
-      <label for="supplier" class="form-label">Seleziona Commerciale</label>
-      <select name="supplier_id" id="supplier" class="form-select" required onchange="fetchBrands(this.value)">
-        <option value="">-- Seleziona Commerciale --</option>
-        <?php foreach ($suppliers as $supplier): ?>
-          <option value="<?= $supplier['id'] ?>"><?= htmlspecialchars($supplier['name']) ?></option>
-        <?php endforeach; ?>
-      </select>
+<body>
+  <nav class="navbar navbar-expand-lg bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="home.php">Benvenuto amministratore</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="home.php">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="order.php">creare nuovo ordine</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="home.php">Commerciale</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="product_list.php">Prodotti</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="brand_list.php">Azienda</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="categories.php">Categorie</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="view_orders.php">Visualizza ordini</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="suspendend_view_orders.php">Ordine sospeso</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="edit_contact.php?id=1">Contatto</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <a href="view_orders.php" class="btn btn-outline-secondary">Visualizza ordini</a>
+      <a href="./home.php" class="btn btn-secondary">Torna alla Home</a>
     </div>
 
-    <!-- <div class="mb-3">
+
+
+    <h2>Crea ordine</h2>
+    <form action="submit_order.php" method="POST">
+      <div class="mb-3">
+
+        <label for="supplier" class="form-label">Seleziona Commerciale</label>
+        <select name="supplier_id" id="supplier" class="form-select" required onchange="fetchBrands(this.value)">
+          <option value="">-- Seleziona Commerciale --</option>
+          <?php foreach ($suppliers as $supplier): ?>
+            <option value="<?= $supplier['id'] ?>"><?= htmlspecialchars($supplier['name']) ?></option>
+          <?php endforeach; ?>
+        </select>
+      </div>
+
+      <!-- <div class="mb-3">
       <label class="form-label">Nome del fornitore</label>
       <input type="text" name="order_supplier_name" class="form-control" required>
     </div>
@@ -154,44 +194,44 @@ if (isset($_GET['success']) && $_GET['success'] == 1) {
       <input type="text" name="order_supplier_sales_contact" class="form-control" required>
     </div> -->
 
-    <div class="mb-3">
-      <label for="brand" class="form-label">Seleziona Azienda</label>
-      <select name="brand" id="brand" class="form-select" required onchange="fetchItemsByBrand(this.value)">
-        <option value="">-- Seleziona Azienda --</option>
-        <?php foreach ($brands as $brand): ?>
-          <option value="<?= $brand['id'] ?>"><?= htmlspecialchars($brand['brand']) ?></option>
-        <?php endforeach; ?>
-      </select>
-    </div>
-
-    <div class="mb-3">
-      <label class="form-label">Data dell'ordine</label>
-      <input type="date" name="order_date" class="form-control" required>
-    </div>
-
-    <div class="mb-3">
-      <label class="form-label">numero dell'ordine</label>
-      <input type="text" name="order_number" class="form-control" required>
-    </div>
-
-    <div class="mb-3">
-      <label class="form-label">Note</label>
-      <textarea name="notes" class="form-control"></textarea>
-    </div>
-    <div class="mb-3">
-      <label class="form-label">Invia ordine tramite</label><br>
-      <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" name="send_method" id="sendEmail" value="email" checked>
-        <label class="form-check-label" for="sendEmail">E-mail</label>
+      <div class="mb-3">
+        <label for="brand" class="form-label">Seleziona Azienda</label>
+        <select name="brand" id="brand" class="form-select" required onchange="fetchItemsByBrand(this.value)">
+          <option value="">-- Seleziona Azienda --</option>
+          <?php foreach ($brands as $brand): ?>
+            <option value="<?= $brand['id'] ?>"><?= htmlspecialchars($brand['brand']) ?></option>
+          <?php endforeach; ?>
+        </select>
       </div>
-      <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" name="send_method" id="sendWhatsApp" value="whatsapp">
-        <label class="form-check-label" for="sendWhatsApp">WhatsApp</label>
+
+      <div class="mb-3">
+        <label class="form-label">Data dell'ordine</label>
+        <input type="date" name="order_date" class="form-control" required>
       </div>
-    </div>
+
+      <div class="mb-3">
+        <label class="form-label">numero dell'ordine</label>
+        <input type="text" name="order_number" class="form-control" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Note</label>
+        <textarea name="notes" class="form-control"></textarea>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Invia ordine tramite</label><br>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="send_method" id="sendEmail" value="email" checked>
+          <label class="form-check-label" for="sendEmail">E-mail</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="send_method" id="sendWhatsApp" value="whatsapp">
+          <label class="form-check-label" for="sendWhatsApp">WhatsApp</label>
+        </div>
+      </div>
 
 
-    <h5>Elementi</h5>
+      <h5>Elementi</h5>
       <div class="table-responsive">
         <table class="table table-bordered" style="min-width:1000px">
           <thead>
@@ -206,8 +246,10 @@ if (isset($_GET['success']) && $_GET['success'] == 1) {
           <tbody id="item_list"></tbody>
         </table>
       </div>
-    <button type="submit" class="btn btn-primary my-5">Invia ordine</button>
-  </form>
+      <button type="submit" class="btn btn-primary my-5">Invia ordine</button>
+    </form>
+  </div>
+
 </body>
 
 </html>

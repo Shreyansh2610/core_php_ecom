@@ -62,14 +62,15 @@ if (!isset($_SESSION['admin_logged_in'])) {
         </div>
     </nav>
     <div class="container mt-4">
+        <h2 class="mb-4">Benvenuto amministratore</h2>
 
 
-        <!-- <div class="mb-3">
+        <div class="mb-3">
             <a href="order.php" class="btn btn-primary">➤ creare nuovo ordine</a>
             <a href="view_orders.php" class="btn btn-outline-secondary">📄 storico ordini</a>
-        </div> -->
+        </div>
 
-        <!-- <ul class="nav nav-tabs mb-3" id="homeTabs" role="tablist">
+        <ul class="nav nav-tabs mb-3" id="homeTabs" role="tablist">
             <li class="nav-item">
                 <a class="nav-link active" id="suppliers-tab" data-bs-toggle="tab" href="#suppliers" role="tab">Fornitori</a>
             </li>
@@ -79,71 +80,11 @@ if (!isset($_SESSION['admin_logged_in'])) {
             <li class="nav-item">
                 <a class="nav-link" id="categories-tab" data-bs-toggle="tab" href="#categories" role="tab">Categorie</a>
             </li>
-        </ul> -->
+        </ul>
 
-        <!-- Supplier Management -->
-        <div class="tab-pane fade show active" id="suppliers" role="tabpanel">
-            <h4>Aggiungi Commerciale</h4>
-            <form method="POST" action="add_supplier.php" class="mb-3">
-                <div class="row">
-                    <div class="col-md-4">
-                        <input type="text" name="name" class="form-control mb-2" placeholder="Nome Commerciale" required>
-                        <input type="text" name="address" class="form-control mb-2" placeholder="indirizzo">
-                        <input type="text" name="phone" class="form-control mb-2" placeholder="telefono">
-                        <input type="email" name="email" class="form-control mb-2" placeholder="E-mail dell'agente">
-                        <input type="text" name="vat_number" class="form-control mb-2" placeholder="P.IVA">
-                        <input type="text" name="sales_contact" class="form-control mb-2" placeholder="Rappresentante vendite (Agente)">
-                        <input type="text" name="agent_telphone" class="form-control mb-2" placeholder="Telefono dell'agente">
-                        <input type="text" name="sdi" class="form-control mb-2" placeholder="SDI">
-                        <input type="text" name="iban" class="form-control mb-2" placeholder="IBAN">
-                        <input type="text" name="supplier_email" class="form-control mb-2" placeholder="E-mail del fornitore">
-                        <input type="text" name="supplier_email_pec" class="form-control mb-2" placeholder="Email fornitore pec">
-                        <input type="text" name="supplier_cell" class="form-control mb-2" placeholder="Cellulare del fornitore">
-                        <input type="text" name="supplier_responsible" class="form-control mb-2" placeholder="Responsabile">
-                        <!-- <input type="text" name="payment" class="form-control mb-2" placeholder="Pagamento"> -->
-                        <button type="submit" class="btn btn-success">Aggiungi Commerciale</button>
-                    </div>
-                </div>
-            </form>
-            <hr>
-            <h4>tutti i fornitori</h4>
-            <div class="table-responsive">
-                <table class="table table-bordered align-middle">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>indirizzo</th>
-                            <th>telefono</th>
-                            <th>E-Mail</th>
-                            <th>P.IVA</th>
-                            <th>Rappresentante vendite</th>
-                            <th>Azioni</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        $stmt = $pdo->query("SELECT * FROM suppliers ORDER BY name");
-                        while ($row = $stmt->fetch()) {
-                            echo "<tr>
-                            <td>{$row['name']}</td>
-                            <td>{$row['address']}</td>
-                            <td>{$row['phone']}</td>
-                            <td>{$row['email']}</td>
-                            <td>{$row['vat_number']}</td>
-                            <td>{$row['sales_contact']}</td>
-                            <td>
-                                <a href='edit_supplier.php?id={$row['id']}' class='btn btn-sm btn-warning'>Modificare</a>
-                                <a href='delete_supplier.php?id={$row['id']}' class='btn btn-sm btn-danger' onclick=\"return confirm('Are you sure you want to delete this supplier?');\">Eliminare</a>
-                            </td>
-                        </tr>";
-                        }
-                        ?>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <!-- <div class="tab-content" id="homeTabsContent">
+        <div class="tab-content" id="homeTabsContent">
 
+            <!-- Supplier Management -->
             <div class="tab-pane fade show active" id="suppliers" role="tabpanel">
                 <h4>Aggiungi Fornitore</h4>
                 <form method="POST" action="add_supplier.php" class="mb-3">
@@ -162,6 +103,7 @@ if (!isset($_SESSION['admin_logged_in'])) {
                             <input type="text" name="supplier_email_pec" class="form-control mb-2" placeholder="Email fornitore pec">
                             <input type="text" name="supplier_cell" class="form-control mb-2" placeholder="Cellulare del fornitore">
                             <input type="text" name="supplier_responsible" class="form-control mb-2" placeholder="Responsabile">
+                            <!-- <input type="text" name="payment" class="form-control mb-2" placeholder="Pagamento"> -->
                             <button type="submit" class="btn btn-success">Aggiungi Fornitore</button>
                         </div>
                     </div>
@@ -204,6 +146,7 @@ if (!isset($_SESSION['admin_logged_in'])) {
                 </div>
             </div>
 
+            <!-- Item Management -->
             <div class="tab-pane fade" id="items" role="tabpanel">
                 <h4>Aggiungi articolo</h4>
                 <form action="add_item.php" method="POST" enctype="multipart/form-data">
@@ -292,6 +235,7 @@ if (!isset($_SESSION['admin_logged_in'])) {
                 </div>
             </div>
 
+            <!-- Category Management -->
             <div class="tab-pane fade" id="categories" role="tabpanel">
                 <h4>Aggiungi categoria</h4>
                 <form method="POST" action="add_category.php" class="mb-3">
@@ -333,7 +277,7 @@ if (!isset($_SESSION['admin_logged_in'])) {
                 </div>
             </div>
 
-        </div> -->
+        </div>
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', function() {

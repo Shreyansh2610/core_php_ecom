@@ -29,9 +29,26 @@ ADD upload_time VARCHAR(50) NULL
     $pdo->exec($sql);
     echo "Table 'contact_details' updated successfully!";
 
-    
+    $sql = "
+    ALTER TABLE brands
+    ADD address_1 VARCHAR(255) NULL,
+    ADD address_2 VARCHAR(255) NULL,
+    ADD telephone VARCHAR(50) NULL,
+    ADD mobile VARCHAR(50) NULL,
+    ADD agent VARCHAR(255) NULL,
+    ADD email VARCHAR(255) NULL,
+    ADD pec VARCHAR(255) NULL,
+    ADD vat VARCHAR(255) NULL,
+    ADD iban VARCHAR(255) NULL,
+    ADD sdi VARCHAR(255) NULL,
+    ADD payment VARCHAR(255) NULL
+";
 
-    echo "Record added in 'contact_details' successfully!";
+
+    // Execute SQL
+    $pdo->exec($sql);
+    echo "Table 'brands' updated successfully!";
+
 } catch (PDOException $e) {
     echo "Connection failed or error creating table: " . $e->getMessage();
 }
