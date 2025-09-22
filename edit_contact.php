@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $address = $_POST['address'];
     $vat = $_POST['vat'];
     // $closure = $_POST['closure'];
-    $closure = $_POST['upload_time'];
+    $uploadTime = $_POST['upload_time'];
     $email_pec = $_POST['email_pec'];
     $responsible = $_POST['responsible'];
     $sdi = $_POST['sdi'];
