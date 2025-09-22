@@ -123,16 +123,13 @@ if (isset($_GET['success']) && $_GET['success'] == 1) {
             <a class="nav-link" href="order.php">creare nuovo ordine</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="home.php">Commerciale</a>
+            <a class="nav-link" href="commercial.php">Commerciale</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="product_list.php">Prodotti</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="brand_list.php">Azienda</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="categories.php">Categorie</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="view_orders.php">Visualizza ordini</a>
@@ -232,8 +229,8 @@ if (isset($_GET['success']) && $_GET['success'] == 1) {
 
 
       <h5>Elementi</h5>
-      <div class="table-responsive">
-        <table class="table table-bordered" style="min-width:1000px">
+      <!-- <div class="table-responsive"> -->
+        <table class="table table-bordered">
           <thead>
             <tr>
               <th>Immagine</th>
@@ -245,7 +242,7 @@ if (isset($_GET['success']) && $_GET['success'] == 1) {
           </thead>
           <tbody id="item_list"></tbody>
         </table>
-      </div>
+      <!-- </div> -->
       <button type="submit" class="btn btn-primary my-5">Invia ordine</button>
     </form>
   </div>

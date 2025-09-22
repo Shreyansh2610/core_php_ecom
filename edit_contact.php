@@ -65,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <input type="text" name="email" class="form-control mb-2" value="<?= htmlspecialchars($contact['email']) ?>" placeholder="Email" required>
         <input type="text" name="address" class="form-control mb-2" value="<?= htmlspecialchars($contact['address']) ?>" placeholder="Indirizzo" required>
         <input type="text" name="vat" class="form-control mb-2" value="<?= htmlspecialchars($contact['vat']) ?>" placeholder="IVA" required>
-        <input type="text" name="contact_details" class="form-control mb-2" value="<?= htmlspecialchars($contact['contact_details']??'') ?>" placeholder="Orario scarico merce" required>
+        <input type="text" name="upload_time" class="form-control mb-2" value="<?= htmlspecialchars($contact['upload_time']??'') ?>" placeholder="Orario scarico merce" required>
         <input type="text" name="email_pec" class="form-control mb-2" value="<?= htmlspecialchars($contact['email_pec']) ?>" placeholder="Email PEC" required>
         <input type="text" name="responsible" class="form-control mb-2" value="<?= htmlspecialchars($contact['responsible']) ?>" placeholder="Responsabile" required>
         <input type="text" name="sdi" class="form-control mb-2" value="<?= htmlspecialchars($contact['sdi']) ?>" placeholder="SDI" required>

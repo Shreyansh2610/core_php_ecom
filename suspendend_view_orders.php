@@ -93,7 +93,7 @@ $statusOptions = [
                         <a class="nav-link" href="order.php">creare nuovo ordine</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="home.php">Commerciale</a>
+                        <a class="nav-link" href="commercial.php">Commerciale</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="product_list.php">Prodotti</a>

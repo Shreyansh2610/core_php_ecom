@@ -39,16 +39,13 @@ if (!isset($_SESSION['admin_logged_in'])) {
                         <a class="nav-link" href="order.php">creare nuovo ordine</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="home.php">Commerciale</a>
+                        <a class="nav-link" href="commercial.php">Commerciale</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="product_list.php">Prodotti</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="brand_list.php">Azienda</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="categories.php">Categorie</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="view_orders.php">Visualizza ordini</a>
@@ -68,7 +65,7 @@ if (!isset($_SESSION['admin_logged_in'])) {
             <h2 class="mb-0">Azienda</h2>
             <a href="./home.php" class="btn btn-secondary">Torna alla Home</a>
         </div>
-        <h2 class="mb-2">Crea agenzia</h2>
+        <h2 class="mb-2">Crea Azienda</h2>
         <form action="add_brand.php" method="POST" enctype="multipart/form-data" class="mb-2">
             <div class="row">
                 <div class="col-md-6">
@@ -124,12 +121,12 @@ if (!isset($_SESSION['admin_logged_in'])) {
                         <label for="payment" class="form-label">Payment</label>
                         <input type="text" name="payment" id="payment" class="form-control" placeholder="Payment">
                     </div>
-                    <button type="submit" class="btn btn-success">aggiungere agenzia</button>
+                    <button type="submit" class="btn btn-success">Aggiungere Azienda</button>
                 </div>
             </div>
         </form>
 
-        <h2 class="mb-2">Tutte le agenzie</h2>
+        <h2 class="mb-2">Tutte le Aziende</h2>
 
         <div class="row">
             <div class="col-12 col-lg-6">

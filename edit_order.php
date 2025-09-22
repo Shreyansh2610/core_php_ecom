@@ -196,8 +196,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $html .= "<tr>
                     <td>{$item['sku']}</td>
                     <td colspan='2'>{$item['name']}</td>
+                    <td>{$item['units_per_box']}</td>
                     <td>{$item['box_requested']}</td>
-                    <td></td>
+                    
                   </tr>";
     }
 
@@ -438,7 +439,7 @@ if (!$order) {
 
 
         <h5>Elementi</h5>
-        <div class="table-responsive">
+        <!-- <div class="table-responsive"> -->
             <table class="table table-bordered" style="min-width:1000px">
                 <thead>
                     <tr>
@@ -480,7 +481,7 @@ if (!$order) {
                     <?php endforeach; ?>
                 </tbody>
             </table>
-        </div>
+        <!-- </div> -->
         <button type="submit" class="btn btn-primary my-5">Aggiornamento</button>
         <a href="view_orders.php" class="btn btn-secondary my-5">Annulla</a>
     </form>

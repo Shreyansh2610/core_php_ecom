@@ -59,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 
 <body class="container mt-5">
-    <h3>Modifica agenzia
+    <h3>Modifica Azienda
 
     </h3>
     <form method="POST" enctype="multipart/form-data">
