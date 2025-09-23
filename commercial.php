@@ -34,7 +34,7 @@ if (!isset($_SESSION['admin_logged_in'])) {
                         <a class="nav-link active" aria-current="page" href="home.php">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="order.php">creare nuovo ordine</a>
+                        <a class="nav-link" href="order.php">Creare nuovo ordine</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="commercial.php">Commerciale</a>
@@ -245,9 +245,9 @@ if (!isset($_SESSION['admin_logged_in'])) {
                         </div>
                     </div>
                 </form>
-                <a href="product_list.php" class=" mt-2 btn btn-outline-secondary">Tutto Prodotti</a>
+                <a href="product_list.php" class=" mt-2 btn btn-outline-secondary">Tutti Prodotti</a>
                 <hr>
-                <h4>Tutto Prodotti</h4>
+                <h4>Tutti Prodotti</h4>
                 <div class="table-responsive">
                     <table class="table table-bordered align-middle">
                         <thead>

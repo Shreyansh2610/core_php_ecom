@@ -169,7 +169,7 @@ if (!isset($_SESSION['admin_logged_in'])) {
                 <a href="suspendend_view_orders.php" class="text-decoration-none">
                     <div class="card text-center">
                         <div class="card-body">
-                            <h5 class="card-title">Ordini sospes</h5>
+                            <h5 class="card-title">Ordini sospesi</h5>
                         </div>
                     </div>
                 </a>

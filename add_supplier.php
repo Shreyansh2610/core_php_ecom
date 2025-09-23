@@ -26,9 +26,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $stmt = $pdo->prepare("INSERT INTO suppliers (name, address, phone, email, vat_number, sales_contact,agent_telphone,sdi,iban,supplier_email,supplier_email_pec,supplier_cell,supplier_responsible,payment)
                             VALUES (?, ?, ?, ?, ?, ?,?, ?, ?, ?,?, ?, ?, ?)");
-    $stmt->execute([$name, $address, $phone, $email, $vat_number, $sales_contact,$agent_telephone,$agent_telephone,$sdi,$iban,$supp_email,$supp_email_pec,$supp_cell,$supp_res,$payment]);
+    $stmt->execute([$name, $address, $phone, $email, $vat_number, $sales_contact,$agent_telephone,$sdi,$iban,$supp_email,$supp_email_pec,$supp_cell,$supp_res,$payment]);
 
-    header('Location: home.php#suppliers');
+    header('Location: commercial.php');
     exit;
 }
 ?>

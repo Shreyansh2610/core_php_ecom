@@ -58,7 +58,7 @@ if ($whereClauses) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tutto Prodotti</title>
+    <title>Tutti Prodotti</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
@@ -75,7 +75,7 @@ if ($whereClauses) {
                         <a class="nav-link active" aria-current="page" href="home.php">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="order.php">creare nuovo ordine</a>
+                        <a class="nav-link" href="order.php">Creare nuovo ordine</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="commercial.php">Commerciale</a>
@@ -100,10 +100,6 @@ if ($whereClauses) {
         </div>
     </nav>
     <div class="container mt-4">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h2 class="mb-0">Tutto Prodotti</h2>
-            <a href="./home.php" class="btn btn-secondary">Torna alla Home</a>
-        </div>
         <h2 class="mb-2">Aggiungi prodotto</h2>
         <form action="add_item.php" method="POST" enctype="multipart/form-data" class="mb-2">
             <div class="row">

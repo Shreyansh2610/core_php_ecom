@@ -201,7 +201,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <td>{$item['sku']}</td>
                     <td colspan='2'>{$item['name']}</td>
                     <td>{$item['units_per_box']}</td>
-                    <td>{$item['box_requested']}</td>
+                    <td style='text-align: center;'>{$item['box_requested']}</td>
                   </tr>";
         }
 

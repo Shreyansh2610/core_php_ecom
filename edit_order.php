@@ -197,7 +197,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <td>{$item['sku']}</td>
                     <td colspan='2'>{$item['name']}</td>
                     <td>{$item['units_per_box']}</td>
-                    <td>{$item['box_requested']}</td>
+                    <td style='text-align: center;'>{$item['box_requested']}</td>
                     
                   </tr>";
     }
@@ -402,9 +402,9 @@ if (!$order) {
         </div> -->
 
         <div class="mb-3">
-            <label for="brand" class="form-label">Seleziona agenzia</label>
+            <label for="brand" class="form-label">Seleziona azienda</label>
             <select name="brand" id="brand" class="form-select" required onchange="fetchItemsByBrand(this.value)">
-                <option value="">-- Seleziona agenzia --</option>
+                <option value="">-- Seleziona azienda --</option>
                 <?php foreach ($brands as $brand): ?>
                     <option value="<?= $brand['id'] ?>" <?= $brand['id'] == $orderBrand ? 'selected' : '' ?>><?= htmlspecialchars($brand['brand']) ?></option>
                 <?php endforeach; ?>
