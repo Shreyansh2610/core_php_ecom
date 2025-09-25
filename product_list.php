@@ -188,7 +188,7 @@ if ($whereClauses) {
             </div>
         </form>
 
-        <div class="table-responsive">
+
             <table class="table table-bordered align-middle">
                 <thead>
                     <tr>
@@ -240,7 +240,7 @@ if ($whereClauses) {
                 </tbody>
 
             </table>
-        </div>
+
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
