@@ -143,7 +143,7 @@ if ($whereClauses) {
             </div>
         </form>
 
-        <h2 class="mb-2">Tutto Prodotti</h2>
+        <h2 class="mb-2">Tutti Prodotti</h2>
 
         <form method="GET" class="row g-3 mb-4">
             <div class="col-md-3">
