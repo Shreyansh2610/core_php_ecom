@@ -72,7 +72,7 @@ if (isset($_GET['success']) && $_GET['success'] == 1) {
             <td>${item.sku}</td>
             <td>${item.name}</td>
             <td>${item.units_per_box}</td>
-            <td>
+            <td style="min-width: 35%;">
               <div class="input-group">
                 <button type="button" class="btn btn-outline-secondary" onclick="adjustQuantity(${item.id}, -1)">−</button>
                 <input type="number" id="qty-${item.id}" name="quantities[${item.id}]" min="0" class="form-control text-center" value="0" />
@@ -237,7 +237,7 @@ if (isset($_GET['success']) && $_GET['success'] == 1) {
               <th>SKU</th>
               <th>Nome del prodotto</th>
               <th>Unità/Scatola</th>
-              <th>Scatola richiesta</th>
+              <th style="min-width: 35%;">Scatola richiesta</th>
             </tr>
           </thead>
           <tbody id="item_list"></tbody>

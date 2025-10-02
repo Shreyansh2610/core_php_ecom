@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['name'])) {
     $stmt = $pdo->prepare("INSERT INTO categories (name) VALUES (?)");
     $stmt->execute([$name]);
 
-    header("Location: home.php?tab=categories");
+    header("Location: categories.php");
     exit;
 }
 ?>

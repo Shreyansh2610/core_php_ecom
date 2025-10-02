@@ -11,7 +11,7 @@ if (!isset($_SESSION['admin_logged_in'])) {
 $suppliers = $pdo->query("SELECT id, name FROM suppliers ORDER BY name")->fetchAll(PDO::FETCH_ASSOC);
 
 // Fetch brand list for dropdown
-$brands = $pdo->query("SELECT DISTINCT brand FROM items WHERE brand IS NOT NULL AND brand != '' ORDER BY brand")->fetchAll(PDO::FETCH_COLUMN);
+$brands = $pdo->query("SELECT DISTINCT brand FROM brands WHERE brand IS NOT NULL AND brand != '' ORDER BY brand")->fetchAll(PDO::FETCH_COLUMN);
 
 // Fetch sku list for dropdown
 $skus = $pdo->query("SELECT DISTINCT sku FROM items WHERE sku IS NOT NULL AND sku != '' ORDER BY sku")->fetchAll(PDO::FETCH_COLUMN);
@@ -31,7 +31,7 @@ if (!empty($supplier_id)) {
 }
 
 if (!empty($brand)) {
-    $whereClauses[] = 'i.brand = ?';
+    $whereClauses[] = 'b.brand = ?';
     $params[] = $brand;
 }
 if (!empty($sku)) {
@@ -39,13 +39,13 @@ if (!empty($sku)) {
     $params[] = $sku;
 }
 if (!empty($filterProduct)) {
-    $whereClauses[] = 'i.name LIKE %?%';
-    $params[] = $filterProduct;
+    $whereClauses[] = 'i.name LIKE ?';
+    $params[] = '%'.$filterProduct.'%';
 }
 
 $whereSQL = '';
 if ($whereClauses) {
-    $whereSQL = 'WHERE ' . implode(' AND ', $whereClauses);
+    $whereSQL = 'WHERE ' . implode(' OR ', $whereClauses);
 }
 ?>
 <?php if (isset($_GET['error'])): ?>
@@ -107,7 +107,7 @@ if ($whereClauses) {
                     <input type="text" name="name" class="form-control mb-2" placeholder="nome prodotto" required>
                     <input type="text" name="sku" class="form-control mb-2" placeholder="SKU">
                     <select name="brand" class="form-control mb-2" required>
-                        <option value="">-- Seleziona Marca --</option>
+                        <option value="">-- Seleziona Azienda --</option>
                         <?php
                         $stmt = $pdo->query("SELECT id, brand FROM brands ORDER BY brand");
                         while ($row = $stmt->fetch()) {
@@ -126,7 +126,7 @@ if ($whereClauses) {
                         ?>
                     </select>
                     <select multiple name="category_ids[]" class="form-control mb-2">
-                        <option disabled>-- seleziona Categorie (hold Ctrl) --</option>
+                        <option disabled>-- seleziona Commerciale (hold Ctrl) --</option>
                         <?php
                         $stmt = $pdo->query("SELECT id, name FROM categories ORDER BY name");
                         while ($row = $stmt->fetch()) {
@@ -158,9 +158,9 @@ if ($whereClauses) {
                 </select>
             </div>
             <div class="col-md-2">
-                <label for="brand" class="form-label">Marca</label>
+                <label for="brand" class="form-label">Azienda</label>
                 <select name="brand" id="brand" class="form-select">
-                    <option value="">Tutti i marchi</option>
+                    <option value="">Tutti i Azienda</option>
                     <?php foreach ($brands as $b): ?>
                         <option value="<?= htmlspecialchars($b) ?>" <?= $brand == $b ? 'selected' : '' ?>>
                             <?= htmlspecialchars($b) ?>
@@ -195,22 +195,25 @@ if ($whereClauses) {
                         <th>Immagine</th>
                         <th>Nome</th>
                         <th>SKU</th>
-                        <th>Marca</th>
+                        <th>Azienda</th>
                         <th>Unità/Scatola</th>
-                        <th>Fornitore</th>
+                        <!-- <th>Fornitore</th>/ -->
                         <th>Azioni</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php
                     // $stmt = $pdo->query("SELECT i.*, s.name AS supplier_name FROM items i JOIN suppliers s ON i.supplier_id = s.id ORDER BY i.name");
+
                     $stmt = $pdo->prepare("
-                        SELECT i.*, s.name AS supplier_name 
+                        SELECT i.*,b.brand as bnm, s.name AS supplier_name 
                         FROM items i
                         JOIN suppliers s ON i.supplier_id = s.id
+                        LEFT JOIN brands b ON b.id = i.brand
                         $whereSQL
                         ORDER BY i.name
                     ");
+                    
                     $stmt->execute($params);
                     $items = $stmt->fetchAll();
 
@@ -224,9 +227,8 @@ if ($whereClauses) {
                                 <td>{$imageHtml}</td>
                                 <td>{$item['name']}</td>
                                 <td>{$item['sku']}</td>
-                                <td>{$item['brand']}</td>
+                                <td>{$item['bnm']}</td>
                                 <td>{$item['units_per_box']}</td>
-                                <td>{$item['supplier_name']}</td>
                                 <td>
                                     <a href='edit_item.php?id={$item['id']}' class='btn btn-sm btn-warning'>Modificare</a>
                                     <a href='delete_item.php?id={$item['id']}' class='btn btn-sm btn-danger' onclick=\"return confirm('Delete this item?');\">Eliminare</a>

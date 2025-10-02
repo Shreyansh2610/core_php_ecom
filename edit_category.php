@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $stmt = $pdo->prepare("UPDATE categories SET name = ? WHERE id = ?");
         $stmt->execute([$name, $id]);
-        header('Location: home.php?tab=categories');
+        header('Location: categories.php');
         exit;
     }
 }
@@ -49,7 +49,7 @@ if (!$category) {
             <input id="name" type="text" name="name" class="form-control" value="<?= htmlspecialchars($category['name']) ?>" required>
         </div>
         <button type="submit" class="btn btn-primary">Aggiorna categoria</button>
-        <a href="home.php?tab=categories" class="btn btn-secondary">Cancellare</a>
+        <a href="categories.php" class="btn btn-secondary">Cancellare</a>
     </form>
 </body>
 </html>

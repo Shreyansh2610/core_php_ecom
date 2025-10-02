@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt = $pdo->prepare($sql);
     $stmt->execute($params);
 
-    header("Location: home.php?tab=items");
+    header("Location: product_list.php");
     exit;
 }
 ?>
@@ -63,11 +63,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <form method="POST" enctype="multipart/form-data">
         <input type="text" name="name" class="form-control mb-2" value="<?= htmlspecialchars($item['name']) ?>" placeholder="Name" required>
         <input type="text" name="sku" class="form-control mb-2" value="<?= htmlspecialchars($item['sku']) ?>" placeholder="SKU">
-        <input type="text" name="brand" class="form-control mb-2" value="<?= htmlspecialchars($item['brand']) ?>" placeholder="Brand">
+        <select name="brand" class="form-control mb-2" required>
+            <option value="">-- Seleziona Azienda --</option>
+            <?php
+            $stmt = $pdo->query("SELECT id, brand FROM brands ORDER BY brand");
+            while ($row = $stmt->fetch()) {
+                echo "<option value='{$row['id']}' ".($item['brand']==$row['id']?'selected':'').">{$row['brand']}</option>";
+            }
+            ?>
+        </select>
+        <!-- <input type="text" name="brand" class="form-control mb-2" value="<?= htmlspecialchars($item['brand']) ?>" placeholder="Brand"> -->
         <input type="text" name="units_per_box" class="form-control mb-2" value="<?= $item['units_per_box'] ?>" placeholder="Units per Box">
 
         <select name="supplier_id" class="form-control mb-2" required>
-            <option value="">-- Seleziona fornitore --</option>
+            <option value="">-- Seleziona Commerciale --</option>
             <?php
             $suppliers = $pdo->query("SELECT id, name FROM suppliers ORDER BY name");
             while ($s = $suppliers->fetch()) {
@@ -89,7 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
         <button type="submit" class="btn btn-primary">Aggiorna elemento</button>
-        <a href="home.php?tab=items" class="btn btn-secondary">Annulla</a>
+        <a href="product_list.php" class="btn btn-secondary">Annulla</a>
     </form>
 </body>
 </html>
