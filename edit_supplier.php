@@ -25,6 +25,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_POST['supplier_cell'],
         $_POST['supplier_responsible'],
         $_POST['payment'],
+        $_POST['brand'],
+        $_POST['agency_address'],
+        $_POST['agency_telephone'],
+        $_POST['agency_mobile'],
+        $_POST['agency_address_1'],
+        $_POST['agency_address_2'],
+        $_POST['agency_agent'],
+        $_POST['agency_email'],
+        $_POST['agency_pec'],
+        $_POST['agency_vat'],
+        $_POST['agency_iban'],
+        $_POST['agency_sdi'],
+        $_POST['agency_payment'],
         $id,
     ]);
 
@@ -47,13 +60,13 @@ if (!$supplier) {
 
 <head>
     <meta charset="UTF-8">
-    <title>Modifica fornitore</title>
+    <title>Modifica Commerciale</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
 <body>
     <div class="container mt-5">
-        <h3>Modifica fornitore</h3>
+        <h3>Modifica Commerciale</h3>
         <form method="POST">
             <div class="mb-2"><input name="name" placeholder="Nome Fornitore" class="form-control" value="<?= htmlspecialchars($supplier['name']) ?>" required></div>
             <div class="mb-2"><input name="address" placeholder="indirizzo" class="form-control" value="<?= htmlspecialchars($supplier['address']) ?>"></div>
@@ -69,7 +82,31 @@ if (!$supplier) {
             <input type="text" name="supplier_cell" class="form-control mb-2" placeholder="Cellulare del fornitore" value="<?= htmlspecialchars($supplier['supplier_cell']) ?>">
             <input type="text" name="supplier_responsible" class="form-control mb-2" placeholder="Responsabile" value="<?= htmlspecialchars($supplier['supplier_responsible']) ?>">
             <input type="text" name="payment" class="form-control mb-2" placeholder="Pagamento" value="<?= htmlspecialchars($supplier['payment']) ?>">
-            <button type="submit" placeholder="Rappresentante vendite" class="btn btn-success">Aggiorna fornitore</button>
+            <hr>
+
+            <?php
+            $brands = $pdo->query("SELECT id, brand FROM brands ORDER BY brand")->fetchAll(PDO::FETCH_ASSOC);
+            ?>
+            <select name="brand" id="brand" class="form-select mb-2" required onchange="fetchItemsByBrand(this.value)">
+                <option value="">-- Seleziona azienda --</option>
+                <?php foreach ($brands as $brand): ?>
+                    <option value="<?= $brand['brand'] ?>" <?= $supplier['brand']==$brand['brand'] ?>><?= htmlspecialchars($brand['brand']) ?></option>
+                <?php endforeach; ?>
+            </select>
+            <input type="text" name="agency_address" id="address" class="form-control mb-2" placeholder="Indirizzo" value="<?= htmlspecialchars($supplier['agency_address']) ?>">
+            <input type="text" name="agency_telephone" id="telephone" class="form-control mb-2" placeholder="Telefono" value="<?= htmlspecialchars($supplier['agency_telephone']) ?>">
+            <input type="text" name="agency_mobile" id="mobile" class="form-control mb-2" placeholder="Cellulare" value="<?= htmlspecialchars($supplier['agency_mobile']) ?>">
+            <input type="text" name="agency_address_1" id="address_1" class="form-control mb-2" placeholder="Indirizzo 1" value="<?= htmlspecialchars($supplier['agency_address_1']) ?>">
+            <input type="text" name="agency_address_2" id="address_2" class="form-control mb-2" placeholder="Indirizzo 2" value="<?= htmlspecialchars($supplier['agency_address_2']) ?>">
+            <input type="text" name="agency_agent" id="agent" class="form-control mb-2" placeholder="Indirizzo 2" value="<?= htmlspecialchars($supplier['agency_agent']) ?>">
+            <input type="text" name="agency_email" id="email" class="form-control mb-2" placeholder="Email" value="<?= htmlspecialchars($supplier['agency_email']) ?>">
+            <input type="text" name="agency_pec" id="pec" class="form-control mb-2" placeholder="PEC" value="<?= htmlspecialchars($supplier['agency_pec']) ?>">
+            <input type="text" name="agency_vat" id="vat" class="form-control mb-2" placeholder="P.Iva" value="<?= htmlspecialchars($supplier['agency_vat']) ?>">
+            <input type="text" name="agency_iban" id="iban" class="form-control mb-2" placeholder="IBAN" value="<?= htmlspecialchars($supplier['agency_iban']) ?>">
+            <input type="text" name="agency_sdi" id="sdi" class="form-control mb-2" placeholder="SDI" value="<?= htmlspecialchars($supplier['agency_sdi']) ?>">
+            <input type="text" name="agency_payment" id="payment" class="form-control mb-2" placeholder="Payment" value="<?= htmlspecialchars($supplier['agency_payment']) ?>">
+
+            <button type="submit" placeholder="Rappresentante vendite" class="btn btn-success my-5">Aggiorna Commerciale</button>
             <a href="home.php#suppliers" class="btn btn-secondary">Annulla</a>
         </form>
     </div>

@@ -98,6 +98,33 @@ if (!isset($_SESSION['admin_logged_in'])) {
                         <input type="text" name="supplier_cell" class="form-control mb-2" placeholder="Cellulare del fornitore">
                         <input type="text" name="supplier_responsible" class="form-control mb-2" placeholder="Responsabile">
                         <!-- <input type="text" name="payment" class="form-control mb-2" placeholder="Pagamento"> -->
+                        <hr>
+                        <!-- <input type="text" name="brand" id="brand" class="form-control mb-2" placeholder="Azienda"> -->
+                        <?php
+                            $brands = $pdo->query("SELECT id, brand FROM brands ORDER BY brand")->fetchAll(PDO::FETCH_ASSOC);
+                        ?>
+                        <select name="brand" id="brand" class="form-select mb-2" required onchange="fetchItemsByBrand(this.value)">
+                            <option value="">-- Seleziona azienda --</option>
+                            <?php foreach ($brands as $brand): ?>
+                              <option value="<?= $brand['brand'] ?>"><?= htmlspecialchars($brand['brand']) ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                        <input type="text" name="agency_address" id="address" class="form-control mb-2" placeholder="Indirizzo">
+                        <input type="text" name="agency_telephone" id="telephone" class="form-control mb-2" placeholder="Telefono">
+                        
+                        <input type="text" name="agency_mobile" id="mobile" class="form-control mb-2" placeholder="Cellulare">
+                        <input type="text" name="agency_address_1" id="address_1" class="form-control mb-2" placeholder="Indirizzo 1">
+                        <input type="text" name="agency_address_2" id="address_2" class="form-control mb-2" placeholder="Indirizzo 2">
+                        
+                        <input type="text" name="agency_agent" id="agent" class="form-control mb-2" placeholder="Indirizzo 2">
+                        <input type="text" name="agency_email" id="email" class="form-control mb-2" placeholder="Email">
+                        <input type="text" name="agency_pec" id="pec" class="form-control mb-2" placeholder="PEC">
+                        
+                        <input type="text" name="agency_vat" id="vat" class="form-control mb-2" placeholder="P.Iva">
+                        <input type="text" name="agency_iban" id="iban" class="form-control mb-2" placeholder="IBAN">
+                        <input type="text" name="agency_sdi" id="sdi" class="form-control mb-2" placeholder="SDI">
+                        <input type="text" name="agency_payment" id="payment" class="form-control mb-2" placeholder="Payment">
+
                         <button type="submit" class="btn btn-success">Aggiungi Commerciale</button>
                     </div>
                 </div>
@@ -105,23 +132,23 @@ if (!isset($_SESSION['admin_logged_in'])) {
             <hr>
             <h4>tutti i fornitori</h4>
             <!-- <div class="table-responsive" > -->
-                <table class="table table-bordered align-middle">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>indirizzo</th>
-                            <th>telefono</th>
-                            <th>E-Mail</th>
-                            <th>P.IVA</th>
-                            <th>Rappresentante vendite</th>
-                            <th>Azioni</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        $stmt = $pdo->query("SELECT * FROM suppliers ORDER BY name");
-                        while ($row = $stmt->fetch()) {
-                            echo "<tr>
+            <table class="table table-bordered align-middle">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>indirizzo</th>
+                        <th>telefono</th>
+                        <th>E-Mail</th>
+                        <th>P.IVA</th>
+                        <th>Rappresentante vendite</th>
+                        <th>Azioni</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    $stmt = $pdo->query("SELECT * FROM suppliers ORDER BY name");
+                    while ($row = $stmt->fetch()) {
+                        echo "<tr>
                             <td>{$row['name']}</td>
                             <td>{$row['address']}</td>
                             <td>{$row['phone']}</td>
@@ -133,10 +160,10 @@ if (!isset($_SESSION['admin_logged_in'])) {
                                 <a href='delete_supplier.php?id={$row['id']}' class='btn btn-sm btn-danger' onclick=\"return confirm('Are you sure you want to delete this supplier?');\">Eliminare</a>
                             </td>
                         </tr>";
-                        }
-                        ?>
-                    </tbody>
-                </table>
+                    }
+                    ?>
+                </tbody>
+            </table>
             <!-- </div> -->
         </div>
         <!-- <div class="tab-content" id="homeTabsContent">

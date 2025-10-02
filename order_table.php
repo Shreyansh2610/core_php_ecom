@@ -24,26 +24,12 @@ try {
 
 
     $sql = "
-    ALTER TABLE suppliers
-    ADD brand VARCHAR(255) NULL,
-    ADD agency_address VARCHAR(255) NULL,
-    ADD agency_telephone VARCHAR(255) NULL,
-    ADD agency_mobile VARCHAR(50) NULL,
-    ADD agency_address_1 VARCHAR(50) NULL,
-    ADD agency_address_2 VARCHAR(50) NULL,
-    ADD agency_agent VARCHAR(255) NULL,
-    ADD agency_email VARCHAR(255) NULL,
-    ADD agency_pec VARCHAR(255) NULL,
-    ADD agency_vat VARCHAR(255) NULL,
-    ADD agency_iban VARCHAR(255) NULL,
-    ADD agency_sdi VARCHAR(255) NULL,
-    ADD agency_payment VARCHAR(255) NULL
 ";
 
 
     // Execute SQL
     $pdo->exec($sql);
-    echo "Table 'suppliers' updated successfully!<br>";
+    echo "Table 'orders' updated successfully!<br>";
 
 } catch (PDOException $e) {
     echo "Connection failed or error creating table: " . $e->getMessage();
