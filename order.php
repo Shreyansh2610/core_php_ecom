@@ -157,7 +157,7 @@ if (isset($_GET['success']) && $_GET['success'] == 1) {
       <div class="mb-3">
 
         <label for="supplier" class="form-label">Seleziona Commerciale</label>
-        <select name="supplier_id" id="supplier" class="form-select" required onchange="fetchBrands(this.value)">
+        <select name="supplier_id" id="supplier" class="form-select"  onchange="fetchBrands(this.value)">
           <option value="">-- Seleziona Commerciale --</option>
           <?php foreach ($suppliers as $supplier): ?>
             <option value="<?= $supplier['id'] ?>"><?= htmlspecialchars($supplier['name']) ?></option>

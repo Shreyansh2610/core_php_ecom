@@ -57,7 +57,7 @@ if ($whereClauses) {
 $stmt = $pdo->prepare("
     SELECT DISTINCT o.*, s.name AS supplier_name
     FROM orders o
-    JOIN suppliers s ON o.supplier_id = s.id
+    LEFT JOIN suppliers s ON o.supplier_id = s.id
     JOIN order_items oi ON oi.order_id = o.id
     JOIN items i ON oi.item_id = i.id
     $whereSQL

@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $brand = $_POST['brand'] ?? '';
 
 
-    if (!$supplier_id || !$order_number || empty($quantities)) {
+    if (!$order_number || empty($quantities)) {
         die("Invalid input.");
     }
 
@@ -35,9 +35,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->execute([$supplier_id]);
         $supplier = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if (!$supplier) {
-            throw new Exception("Supplier not found.");
-        }
+        // if (!$supplier) {
+        //     throw new Exception("Supplier not found.");
+        // }
 
         $orderSupplierName = $_POST['order_supplier_name'] ?? $supplier['name'];
         $orderSupplierAddress = $_POST['order_supplier_address'] ?? $supplier['address'];
@@ -109,6 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $sdi              = $supplier['sdi'] ?? '';
         $iban             = $supplier['iban'] ?? '';
         $agent_telephone  = $supplier['agent_telphone'] ?? '';
+        $pmnt             = $supplier['payment'] ?? '';
 
         $stmt = $pdo->prepare("SELECT * FROM contact_details WHERE id = ?");
         $stmt->execute([1]);
@@ -121,10 +122,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // $html .= "<p><strong>Brand:</strong> " . htmlspecialchars($brandData['brand']) . "</p>";
 
         $html .= <<<HTML
-        <style>td, th { text-align:left; vertical-align:top; }</style>
-        <table  border="1" cellspacing='0' width="100%">
+        <style>
+            table {
+                border-collapse: collapse;
+                width: 100%;
+            }
+            td, th {
+                border: 1px solid black;
+                padding: 5px;
+                text-align: left;
+                vertical-align: top;
+            }   
+        </style>
+        <table  width="100%">
             <tr>
-                <td width="50%" style="padding:3px">
+                <td width="100%" colspan="100%" style="padding:3px">
                     <strong>{$contact['name']}</strong><br>
                     Tel: {$contact['telphone']}<br>
                     Cell: {$contact['cell']}<br>
@@ -137,28 +149,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     Resp.: {$contact['responsible']}<br>
                     Codice SDI: {$contact['sdi']}
                 </td>
-                <td width="50%" style="padding:3px">
+                <!-- <td width="50%" style="padding:3px">
                     Consegna: PRONTA<br>
                     Imballo:<br>
                     Resa:<br>
                     Spedizione:<br>
                     Pagamento: BONIFICO ANTICIPATO<br>
                     Banca:
-                </td>
+                </td> -->
             </tr>
             <tr>
-                <td width="50%" style="padding:3px">
-                    <strong>{$orderSupplierName}</strong><br>
-                    Responsabile: {$salesResponsible}<br>
-                    Tel: {$orderSupplierPhone}<br>
-                    Cell: {$salesCell}<br>
-                    Email: {$orderSupplierEmail}<br>
-                    Email pec: {$salesEmailPec}<br>
-                    {$orderSupplierAddress}<br>
-                    IBAN: {$iban}<br>
-                    Codice SDI: {$sdi}<br>
-                    P.IVA: {$orderSupplierVat}
-                </td>
                 <td width="50%" style="padding:3px">
                     <strong>{$brandData['brand']}</strong><br>
                     Tel: {$brandData['telephone']}<br>
@@ -169,6 +169,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     IBAN: {$brandData['iban']}<br>
                     Codice SDI: {$brandData['sdi']}<br>
                     P.IVA: {$brandData['vat']}
+                </td>
+                <td width="50%" style="padding:3px">
+                    <strong>{$orderSupplierName}</strong><br>
+                    Responsabile: {$salesResponsible}<br>
+                    Tel: {$orderSupplierPhone}<br>
+                    Cell: {$salesCell}<br>
+                    Email: {$orderSupplierEmail}<br>
+                    Email pec: {$salesEmailPec}<br>
+                    {$orderSupplierAddress}<br>
+                    IBAN: {$iban}<br>
+                    Codice SDI: {$sdi}<br>
+                    P.IVA: {$orderSupplierVat}<br>
+                    Pagamento: {$pmnt}
                 </td>
             </tr>
         </table>

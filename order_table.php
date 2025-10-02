@@ -23,8 +23,7 @@ try {
 
 
 
-    $sql = "
-";
+    $sql = "ALTER TABLE orders MODIFY supplier_id INT NULL;";
 
 
     // Execute SQL

@@ -97,7 +97,7 @@ if (!isset($_SESSION['admin_logged_in'])) {
                         <input type="text" name="supplier_email_pec" class="form-control mb-2" placeholder="Email fornitore pec">
                         <input type="text" name="supplier_cell" class="form-control mb-2" placeholder="Cellulare del fornitore">
                         <input type="text" name="supplier_responsible" class="form-control mb-2" placeholder="Responsabile">
-                        <!-- <input type="text" name="payment" class="form-control mb-2" placeholder="Pagamento"> -->
+                        <input type="text" name="payment" class="form-control mb-2" placeholder="Pagamento">
                         <hr>
                         <!-- <input type="text" name="brand" id="brand" class="form-control mb-2" placeholder="Azienda"> -->
                         <?php

@@ -43,9 +43,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt = $pdo->prepare("SELECT * FROM suppliers WHERE id = ?");
     $stmt->execute([$supplier_id]);
     $supplier = $stmt->fetch(PDO::FETCH_ASSOC);
-    if (!$supplier) {
-        throw new Exception("Supplier not found.");
-    }
+
+    // if (!$supplier) {
+    //     throw new Exception("Supplier not found.");
+    // }
 
     $orderSupplierName         = $_POST['order_supplier_name'] ?? $supplier['name'];
     $orderSupplierAddress      = $_POST['order_supplier_address'] ?? $supplier['address'];
@@ -107,6 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $sdi              = $supplier['sdi'] ?? '';
     $iban             = $supplier['iban'] ?? '';
     $agent_telephone  = $supplier['agent_telphone'] ?? '';
+    $pmnt             = $supplier['payment'] ?? '';
 
     $stmt = $pdo->prepare("SELECT * FROM contact_details WHERE id = ?");
     $stmt->execute([1]);
@@ -117,10 +119,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $brandData = $stmt->fetch(PDO::FETCH_ASSOC);
 
     $html .= <<<HTML
-        <style>td, th { text-align:left; vertical-align:top; }</style>
-        <table  border="1" cellspacing='0' width="100%">
+        <style>
+            table {
+                border-collapse: collapse;
+                width: 100%;
+            }
+            td, th {
+                border: 1px solid black;
+                padding: 5px;
+                text-align: left;
+                vertical-align: top;
+            }   
+        </style>
+        <table width="100%">
             <tr>
-                <td width="50%" style="padding:3px">
+                <td width="100%" colspan="2" style="padding:3px">
                     <strong>{$contact['name']}</strong><br>
                     Tel: {$contact['telphone']}<br>
                     Cell: {$contact['cell']}<br>
@@ -133,28 +146,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     Resp.: {$contact['responsible']}<br>
                     Codice SDI: {$contact['sdi']}
                 </td>
-                <td width="50%" style="padding:3px">
+                <!-- <td width="50%" style="padding:3px">
                     Consegna: PRONTA<br>
                     Imballo:<br>
                     Resa:<br>
                     Spedizione:<br>
                     Pagamento: BONIFICO ANTICIPATO<br>
                     Banca:
-                </td>
+                </td> -->
             </tr>
             <tr>
-                <td width="50%" style="padding:3px">
-                    <strong>{$orderSupplierName}</strong><br>
-                    Responsabile: {$salesResponsible}<br>
-                    Tel: {$orderSupplierPhone}<br>
-                    Cell: {$salesCell}<br>
-                    Email: {$orderSupplierEmail}<br>
-                    Email pec: {$salesEmailPec}<br>
-                    {$orderSupplierAddress}<br>
-                    IBAN: {$iban}<br>
-                    Codice SDI: {$sdi}<br>
-                    P.IVA: {$orderSupplierVat}
-                </td>
                 <td width="50%" style="padding:3px">
                     <strong>{$brandData['brand']}</strong><br>
                     Tel: {$brandData['telephone']}<br>
@@ -166,11 +167,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     Codice SDI: {$brandData['sdi']}<br>
                     P.IVA: {$brandData['vat']}
                 </td>
+                <td width="50%" style="padding:3px">
+                    <strong>{$orderSupplierName}</strong><br>
+                    Responsabile: {$salesResponsible}<br>
+                    Tel: {$orderSupplierPhone}<br>
+                    Cell: {$salesCell}<br>
+                    Email: {$orderSupplierEmail}<br>
+                    Email pec: {$salesEmailPec}<br>
+                    {$orderSupplierAddress}<br>
+                    IBAN: {$iban}<br>
+                    Codice SDI: {$sdi}<br>
+                    P.IVA: {$orderSupplierVat}<br>
+                    Pagamento: {$pmnt}
+                </td>
             </tr>
         </table>
     HTML;
 
-    
+
 
     $html .= "<p><strong>Notes:</strong> {$notes}</p>";
     $html .= "<p><strong>Ordini totali:</strong> " . count($orderItems) . "</p>";
@@ -319,7 +333,7 @@ if (!$order) {
                     function adjustQuantity(id, change) {
                         const input = document.getElementById(`qty-${id}`);
                         console.log(input);
-                        
+
                         let value = parseInt(input.value ?? 0);
                         value = Math.max(0, value + change);
                         input.value = value;
@@ -367,7 +381,7 @@ if (!$order) {
         <div class="mb-3">
 
             <label for="supplier" class="form-label">Seleziona Commerciale</label>
-            <select name="supplier_id" id="supplier" class="form-select" required onchange="fetchBrands(this.value)">
+            <select name="supplier_id" id="supplier" class="form-select" onchange="fetchBrands(this.value)">
                 <option value="">-- Seleziona Commerciale --</option>
                 <?php foreach ($suppliers as $supplier): ?>
                     <option value="<?= $supplier['id'] ?>" <?= $supplier['id'] === $order['supplier_id'] ? 'selected' : '' ?>><?= htmlspecialchars($supplier['name']) ?></option>
@@ -440,47 +454,47 @@ if (!$order) {
 
         <h5>Elementi</h5>
         <!-- <div class="table-responsive"> -->
-            <table class="table table-bordered" style="min-width:1000px">
-                <thead>
+        <table class="table table-bordered" style="min-width:1000px">
+            <thead>
+                <tr>
+                    <th>Immagine</th>
+                    <th>SKU</th>
+                    <th>Nome del prodotto</th>
+                    <th>Unità/Scatola</th>
+                    <th style="min-width: 35%;">Scatola richiesta</th>
+                </tr>
+            </thead>
+            <tbody id="item_list">
+                <?php foreach ($itemsLists as $items): ?>
+                    <?php
+                    $currentItemsQuery = $pdo->prepare("SELECT box_requested FROM order_items WHERE order_items.order_id = ? AND order_items.item_id = ?");
+
+                    $currentItemsQuery->execute([$order_id, $items['id']]);
+
+                    $currentItems = $currentItemsQuery->fetchColumn();
+                    ?>
                     <tr>
-                        <th>Immagine</th>
-                        <th>SKU</th>
-                        <th>Nome del prodotto</th>
-                        <th>Unità/Scatola</th>
-                        <th style="min-width: 35%;">Scatola richiesta</th>
+                        <td>
+                            <?php if (isset($items['image'])): ?>
+                                <img src="uploads/<?php echo $items['image']; ?>" alt="Item Image" style="width: 60px; height: 60px;">
+                            <?php else: ?>
+                                <span class="text-muted">Nessuna immagine</span>
+                            <?php endif ?>
+                        </td>
+                        <td><?php echo $items['sku']; ?></td>
+                        <td><?php echo $items['name']; ?></td>
+                        <td><?php echo $items['units_per_box']; ?></td>
+                        <td>
+                            <div class="input-group">
+                                <button type="button" class="btn btn-outline-secondary" onclick="adjustQuantity(<?php echo $items['id']; ?>, -1)">−</button>
+                                <input type="number" id="qty-<?php echo $items['id']; ?>" name="quantities[<?php echo $items['id']; ?>]" min="0" class="form-control text-center" value="<?php echo ($currentItems ? $currentItems : 0); ?>" />
+                                <button type="button" class="btn btn-outline-secondary" onclick="adjustQuantity(<?php echo $items['id']; ?>, 1)">+</button>
+                            </div>
+                        </td>
                     </tr>
-                </thead>
-                <tbody id="item_list">
-                    <?php foreach ($itemsLists as $items): ?>
-                        <?php
-                        $currentItemsQuery = $pdo->prepare("SELECT box_requested FROM order_items WHERE order_items.order_id = ? AND order_items.item_id = ?");
-
-                        $currentItemsQuery->execute([$order_id, $items['id']]);
-
-                        $currentItems = $currentItemsQuery->fetchColumn();
-                        ?>
-                        <tr>
-                            <td>
-                                <?php if (isset($items['image'])): ?>
-                                    <img src="uploads/<?php echo $items['image']; ?>" alt="Item Image" style="width: 60px; height: 60px;">
-                                <?php else: ?>
-                                    <span class="text-muted">Nessuna immagine</span>
-                                <?php endif ?>
-                            </td>
-                            <td><?php echo $items['sku']; ?></td>
-                            <td><?php echo $items['name']; ?></td>
-                            <td><?php echo $items['units_per_box']; ?></td>
-                            <td>
-                                <div class="input-group">
-                                    <button type="button" class="btn btn-outline-secondary" onclick="adjustQuantity(<?php echo $items['id']; ?>, -1)">−</button>
-                                    <input type="number" id="qty-<?php echo $items['id']; ?>" name="quantities[<?php echo $items['id']; ?>]" min="0" class="form-control text-center" value="<?php echo ($currentItems ? $currentItems : 0); ?>" />
-                                    <button type="button" class="btn btn-outline-secondary" onclick="adjustQuantity(<?php echo $items['id']; ?>, 1)">+</button>
-                                </div>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
         <!-- </div> -->
         <button type="submit" class="btn btn-primary my-5">Aggiornamento</button>
         <a href="view_orders.php" class="btn btn-secondary my-5">Annulla</a>
