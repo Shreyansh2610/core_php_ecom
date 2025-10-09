@@ -177,7 +177,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     Cell: {$salesCell}<br>
                     Email: {$orderSupplierEmail}<br>
                     Email pec: {$salesEmailPec}<br>
-                    {$orderSupplierAddress}<br>
+                    Indririzzo: {$orderSupplierAddress}<br>
                     IBAN: {$iban}<br>
                     Codice SDI: {$sdi}<br>
                     P.IVA: {$orderSupplierVat}<br>
