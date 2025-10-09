@@ -117,7 +117,7 @@ if ($whereClauses) {
                     </select>
                     <input type="text" name="units_per_box" class="form-control mb-2" placeholder="Unità per scatola" required>
                     <select name="supplier_id" class="form-control mb-2" required>
-                        <option value="">-- seleziona fornitore --</option>
+                        <option value="">--Seleziona Commerciale --</option>
                         <?php
                         $stmt = $pdo->query("SELECT id, name FROM suppliers ORDER BY name");
                         while ($row = $stmt->fetch()) {
@@ -125,15 +125,7 @@ if ($whereClauses) {
                         }
                         ?>
                     </select>
-                    <select multiple name="category_ids[]" class="form-control mb-2">
-                        <option disabled>-- seleziona Commerciale (hold Ctrl) --</option>
-                        <?php
-                        $stmt = $pdo->query("SELECT id, name FROM categories ORDER BY name");
-                        while ($row = $stmt->fetch()) {
-                            echo "<option value='{$row['id']}'>{$row['name']}</option>";
-                        }
-                        ?>
-                    </select>
+                    
                     <div class="mb-3">
                         <label for="image" class="form-label">Immagine del prodotto</label>
                         <input type="file" name="image" id="image" class="form-control" accept="image/*">

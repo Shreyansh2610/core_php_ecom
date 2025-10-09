@@ -136,7 +136,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </style>
         <table  width="100%">
             <tr>
-                <td width="100%" colspan="100%" style="padding:3px">
+                <td width="100%" colspan="100%" style="padding:3px;border: 1px solid black;">
                     <strong>{$contact['name']}</strong><br>
                     Tel: {$contact['telphone']}<br>
                     Cell: {$contact['cell']}<br>
@@ -159,7 +159,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </td> -->
             </tr>
             <tr>
-                <td width="50%" style="padding:3px">
+                <td width="50%" style="padding:3px;border: 1px solid black;">
                     <strong>{$brandData['brand']}</strong><br>
                     Tel: {$brandData['telephone']}<br>
                     Cell: {$brandData['mobile']}<br>
@@ -170,7 +170,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     Codice SDI: {$brandData['sdi']}<br>
                     P.IVA: {$brandData['vat']}
                 </td>
-                <td width="50%" style="padding:3px">
+                <td width="50%" style="padding:3px;border: 1px solid black;">
                     <strong>{$orderSupplierName}</strong><br>
                     Responsabile: {$salesResponsible}<br>
                     Tel: {$orderSupplierPhone}<br>

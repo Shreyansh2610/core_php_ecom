@@ -133,7 +133,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </style>
         <table width="100%">
             <tr>
-                <td width="100%" colspan="2" style="padding:3px">
+                <td width="100%" colspan="2" style="padding:3px;border: 1px solid black;">
                     <strong>{$contact['name']}</strong><br>
                     Tel: {$contact['telphone']}<br>
                     Cell: {$contact['cell']}<br>
@@ -156,7 +156,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </td> -->
             </tr>
             <tr>
-                <td width="50%" style="padding:3px">
+                <td width="50%" style="padding:3px;border: 1px solid black;">
                     <strong>{$brandData['brand']}</strong><br>
                     Tel: {$brandData['telephone']}<br>
                     Cell: {$brandData['mobile']}<br>
@@ -167,7 +167,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     Codice SDI: {$brandData['sdi']}<br>
                     P.IVA: {$brandData['vat']}
                 </td>
-                <td width="50%" style="padding:3px">
+                <td width="50%" style="padding:3px;border: 1px solid black;">
                     <strong>{$orderSupplierName}</strong><br>
                     Responsabile: {$salesResponsible}<br>
                     Tel: {$orderSupplierPhone}<br>
@@ -320,7 +320,7 @@ if (!$order) {
             <td>${item.sku}</td>
             <td>${item.name}</td>
             <td>${item.units_per_box}</td>
-            <td style="min-width: 35%;">
+            <td style="min-width: 200px;">
               <div class="input-group">
                 <button type="button" class="btn btn-outline-secondary" onclick="adjustQuantity(${item.id}, -1)">−</button>
                 <input type="number" id="qty-${item.id}" name="quantities[${item.id}]" min="0" class="form-control text-center" value="0" />
@@ -461,7 +461,7 @@ if (!$order) {
                     <th>SKU</th>
                     <th>Nome del prodotto</th>
                     <th>Unità/Scatola</th>
-                    <th style="min-width: 35%;">Scatola richiesta</th>
+                    <th style="min-width: 200px;">Scatola richiesta</th>
                 </tr>
             </thead>
             <tbody id="item_list">

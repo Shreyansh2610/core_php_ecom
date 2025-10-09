@@ -75,16 +75,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <!-- <input type="text" name="brand" class="form-control mb-2" value="<?= htmlspecialchars($item['brand']) ?>" placeholder="Brand"> -->
         <input type="text" name="units_per_box" class="form-control mb-2" value="<?= $item['units_per_box'] ?>" placeholder="Units per Box">
 
-        <select name="supplier_id" class="form-control mb-2" required>
-            <option value="">-- Seleziona Commerciale --</option>
-            <?php
-            $suppliers = $pdo->query("SELECT id, name FROM suppliers ORDER BY name");
-            while ($s = $suppliers->fetch()) {
-                $selected = $s['id'] == $item['supplier_id'] ? 'selected' : '';
-                echo "<option value='{$s['id']}' $selected>{$s['name']}</option>";
-            }
-            ?>
-        </select>
 
         <div class="mb-2">
             <label>Current Image:</label><br>

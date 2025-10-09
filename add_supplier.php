@@ -24,24 +24,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $supp_res = $_POST['supplier_responsible'] ?? '';
     $payment = $_POST['payment'] ?? '';
 
-    $brand = $_POST['brand'] ?? '';
-    $agency_address = $_POST['agency_address'] ?? '';
-    $agency_telephone = $_POST['agency_telephone'] ?? '';
-    $agency_mobile = $_POST['agency_mobile'] ?? '';
-    $agency_address_1 = $_POST['agency_address_1'] ?? '';
-
-    $agency_address_2 = $_POST['agency_address_2'] ?? '';
-    $agency_agent = $_POST['agency_agent'] ?? '';
-    $agency_email = $_POST['agency_email'] ?? '';
-    $agency_pec = $_POST['agency_pec'] ?? '';
-    $agency_vat = $_POST['agency_vat'] ?? '';
-
-    $agency_iban = $_POST['agency_iban'] ?? '';
-    $agency_sdi = $_POST['agency_sdi'] ?? '';
-    $agency_payment = $_POST['agency_payment'] ?? '';
 
     $stmt = $pdo->prepare("INSERT INTO suppliers (name, address, phone, email, vat_number, sales_contact,agent_telphone,sdi,iban,supplier_email,supplier_email_pec,supplier_cell,supplier_responsible,payment)
-                            VALUES (?, ?, ?, ?, ?, ?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                            VALUES (?, ?, ?, ?, ?, ?,?, ?, ?, ?, ?, ?, ?, ?)");
     $stmt->execute([
         $name, 
         $address, 
@@ -57,19 +42,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $supp_cell,
         $supp_res,
         $payment,
-        $brand,
-        $agency_address,
-        $agency_telephone,
-        $agency_mobile,
-        $agency_address_1,
-        $agency_address_2,
-        $agency_agent,
-        $agency_email,
-        $agency_pec,
-        $agency_vat,
-        $agency_iban,
-        $agency_sdi,
-        $agency_payment,
     ]);
 
     header('Location: commercial.php');
