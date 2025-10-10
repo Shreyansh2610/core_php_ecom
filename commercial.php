@@ -62,7 +62,7 @@ if (!isset($_SESSION['admin_logged_in'])) {
 
 
         <!-- <div class="mb-3">
-            <a href="order.php" class="btn btn-primary">➤ creare nuovo ordine</a>
+            <a href="order.php" class="btn btn-primary">➤ Creare nuovo ordine</a>
             <a href="view_orders.php" class="btn btn-outline-secondary">📄 storico ordini</a>
         </div> -->
 
@@ -104,7 +104,7 @@ if (!isset($_SESSION['admin_logged_in'])) {
                 </div>
             </form>
             <hr>
-            <h4>tutti i fornitori</h4>
+            <h4>Lista Commerciali</h4>
             <!-- <div class="table-responsive" > -->
             <table class="table table-bordered align-middle">
                 <thead>

@@ -195,7 +195,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
 
         $html .= "<p><strong>Notes:</strong> {$notes}</p>";
-        $html .= "<p><strong>Ordini totali:</strong> " . count($orderItems) . "</p>";
+        $html .= "<p><strong>Colli Totali:</strong> " . count($orderItems) . "</p>";
 
         $html .= "<h3>Prodotti</h3>
               <table border='1' cellpadding='4' cellspacing='0' width='100%'>

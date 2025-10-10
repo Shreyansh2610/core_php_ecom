@@ -63,7 +63,7 @@ if (!isset($_SESSION['admin_logged_in'])) {
 
 
         <div class="mb-3">
-            <a href="order.php" class="btn btn-primary">➤ creare nuovo ordine</a>
+            <a href="order.php" class="btn btn-primary">➤ Creare nuovo ordine</a>
             <a href="view_orders.php" class="btn btn-outline-secondary">📄 storico ordini</a>
         </div>
 
