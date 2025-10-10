@@ -16,7 +16,10 @@ if (!isset($_SESSION['admin_logged_in'])) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $supplier_id = $_POST['supplier_id'] ?? 0;
+    $supplier_id = isset($_POST['supplier_id']) && $_POST['supplier_id'] !== ''
+    ? (int)$_POST['supplier_id']
+    : null;
+
     $order_date = $_POST['order_date'] ?? date('Y-m-d');
     $order_number = $_POST['order_number'] ?? '';
     $notes = $_POST['notes'] ?? '';
@@ -128,7 +131,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 width: 100%;
             }
             td, th {
-                border: 1px solid black;
+                border: 1px solid black !important;
                 padding: 5px;
                 text-align: left;
                 vertical-align: top;
@@ -158,6 +161,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     Banca:
                 </td> -->
             </tr>
+        </table>
+        <table  width="100%">
             <tr>
                 <td width="50%" style="padding:3px;border: 1px solid black;">
                     <strong>{$brandData['brand']}</strong><br>
@@ -292,8 +297,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header("Location: order.php?success=1");
         exit;
     } catch (Exception $e) {
-        /* $pdo->rollBack();
-        echo "Error: " . $e->getMessage();*/
+        /* $pdo->rollBack();*/
+        echo "Error: " . $e->getMessage();
     }
 } else {
     header('Location: order.php');

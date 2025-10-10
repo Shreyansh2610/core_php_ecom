@@ -28,7 +28,9 @@ $statusOptions = [
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $status       = $_POST['status'];
-    $supplier_id  = $_POST['supplier_id'] ?? 0;
+    $supplier_id = isset($_POST['supplier_id']) && $_POST['supplier_id'] !== ''
+    ? (int)$_POST['supplier_id']
+    : null;
     $order_date   = $_POST['order_date'] ?? date('Y-m-d');
     $order_number = $_POST['order_number'] ?? '';
     $notes        = $_POST['notes'] ?? '';
