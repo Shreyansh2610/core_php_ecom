@@ -111,6 +111,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $iban             = $supplier['iban'] ?? '';
     $agent_telephone  = $supplier['agent_telphone'] ?? '';
     $pmnt             = $supplier['payment'] ?? '';
+    $supplierAgentTele  = $supplier['agent_telphone'] ?? '';
+    $supplierAgentEmail  = $supplier['email'] ?? '';
 
     $stmt = $pdo->prepare("SELECT * FROM contact_details WHERE id = ?");
     $stmt->execute([1]);
@@ -167,7 +169,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     Indririzzo: {$brandData['address_2']}<br>
                     IBAN: {$brandData['iban']}<br>
                     Codice SDI: {$brandData['sdi']}<br>
-                    P.IVA: {$brandData['vat']}
+                    P.IVA: {$brandData['vat']}<br>
+                    Responsabile Vendite (Agente): {$brandData['agent']}<br>
+                    Pec: {$brandData['pec']}<br>
+                    Payment: {$brandData['payment']}
                 </td>
                 <td width="50%" style="padding:3px;border: 1px solid black;">
                     <strong>{$orderSupplierName}</strong><br>
@@ -180,7 +185,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     IBAN: {$iban}<br>
                     Codice SDI: {$sdi}<br>
                     P.IVA: {$orderSupplierVat}<br>
-                    Pagamento: {$pmnt}
+                    Pagamento: {$pmnt}<br>
+                    Rappresentante vendite: {$orderSupplierSalesContact}<br>
+                    Telefono dell'agente: {$supplierAgentTele}<br>
+                    E-mail dell'agente: {$supplierAgentEmail}
                 </td>
             </tr>
         </table>
