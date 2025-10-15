@@ -162,6 +162,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <tr>
                 <td width="50%" style="padding:3px;border: 1px solid black;">
                     <strong>{$brandData['brand']}</strong><br>
+                    Indririzzo: {$brandData['address']}<br>
                     Tel: {$brandData['telephone']}<br>
                     Cell: {$brandData['mobile']}<br>
                     Email: {$brandData['email']}<br>
