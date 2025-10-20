@@ -264,7 +264,7 @@ if (!isset($_SESSION['admin_logged_in'])) {
                         </thead>
                         <tbody>
                             <?php
-                            $stmt = $pdo->query("SELECT i.*, s.name AS supplier_name FROM items i JOIN suppliers s ON i.supplier_id = s.id ORDER BY i.name");
+                            $stmt = $pdo->query("SELECT i.*, s.name AS supplier_name FROM items i LEFT JOIN suppliers s ON i.supplier_id = s.id ORDER BY i.name");
                             while ($item = $stmt->fetch()) {
                                 $imageHtml = $item['image']
                                     ? "<img src='uploads/" . htmlspecialchars($item['image']) . "' alt='Item Image' style='max-width: 60px; max-height: 60px;'>"

@@ -116,7 +116,7 @@ if ($whereClauses) {
                         ?>
                     </select>
                     <input type="text" name="units_per_box" class="form-control mb-2" placeholder="Unità per scatola" required>
-                    <select name="supplier_id" class="form-control mb-2" required>
+                    <select name="supplier_id" class="form-control mb-2">
                         <option value="">--Seleziona Commerciale --</option>
                         <?php
                         $stmt = $pdo->query("SELECT id, name FROM suppliers ORDER BY name");
@@ -200,7 +200,7 @@ if ($whereClauses) {
                     $stmt = $pdo->prepare("
                         SELECT i.*,b.brand as bnm, s.name AS supplier_name 
                         FROM items i
-                        JOIN suppliers s ON i.supplier_id = s.id
+                        LEFT JOIN suppliers s ON i.supplier_id = s.id
                         LEFT JOIN brands b ON b.id = i.brand
                         $whereSQL
                         ORDER BY i.name

@@ -168,6 +168,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <tr>
                 <td width="50%" style="padding:3px;border: 1px solid black;">
                     <strong>{$brandData['brand']}</strong><br>
+                    Indririzzo: {$brandData['address_1']}<br>
+                    Tel: {$brandData['telephone']}<br>
+                    Email: {$brandData['email']}<br>
+                    P.IVA: {$brandData['vat']}<br>
+                    Payment: {$brandData['payment']}
+                    <!-- <strong>{$brandData['brand']}</strong><br>
                     Indririzzo: {$brandData['address']}<br>
                     Tel: {$brandData['telephone']}<br>
                     Cell: {$brandData['mobile']}<br>
@@ -179,10 +185,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     P.IVA: {$brandData['vat']}<br>
                     Responsabile Vendite (Agente): {$brandData['agent']}<br>
                     Pec: {$brandData['pec']}<br>
-                    Payment: {$brandData['payment']}
+                    Payment: {$brandData['payment']} -->
                 </td>
                 <td width="50%" style="padding:3px;border: 1px solid black;">
                     <strong>{$orderSupplierName}</strong><br>
+                    Indririzzo: {$orderSupplierAddress}<br>
+                    Tel: {$orderSupplierPhone}<br>
+                    Email: {$orderSupplierEmail}<br>
+                    P.IVA: {$orderSupplierVat}<br>
+                    Pagamento: {$pmnt}
+                    <!-- <strong>{$orderSupplierName}</strong><br>
                     Responsabile: {$salesResponsible}<br>
                     Tel: {$orderSupplierPhone}<br>
                     Cell: {$salesCell}<br>
@@ -195,7 +207,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     Pagamento: {$pmnt}<br>
                     Rappresentante vendite: {$orderSupplierSalesContact}<br>
                     Telefono dell'agente: {$supplierAgentTele}<br>
-                    E-mail dell'agente: {$supplierAgentEmail}
+                    E-mail dell'agente: {$supplierAgentEmail} -->
                 </td>
             </tr>
         </table>

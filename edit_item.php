@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $sku = $_POST['sku'];
     $brand = $_POST['brand'];
     $units_per_box = $_POST['units_per_box'];
-    $supplier_id = $_POST['supplier_id'];
+    $supplier_id = $_POST['supplier_id'] ?? null;
 
     // Start with base query and parameters
     $params = [$name, $sku, $brand, $units_per_box, $supplier_id];

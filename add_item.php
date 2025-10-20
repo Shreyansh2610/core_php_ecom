@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $sku = $_POST['sku'] ?? '';
     $brand = $_POST['brand'] ?? '';
     $units_per_box = $_POST['units_per_box'] ?? 0;
-    $supplier_id = $_POST['supplier_id'] ?? 0;
+    $supplier_id = $_POST['supplier_id'] ?? null;
     $category_ids = $_POST['category_ids'] ?? [];
     
     $image_filename = null;
