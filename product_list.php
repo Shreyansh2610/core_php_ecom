@@ -138,17 +138,7 @@ if ($whereClauses) {
         <h2 class="mb-2">Tutti Prodotti</h2>
 
         <form method="GET" class="row g-3 mb-4">
-            <div class="col-md-3">
-                <label for="supplier_id" class="form-label">Fornitore</label>
-                <select name="supplier_id" id="supplier_id" class="form-select">
-                    <option value="">Tutti i fornitori</option>
-                    <?php foreach ($suppliers as $s): ?>
-                        <option value="<?= $s['id'] ?>" <?= $supplier_id == $s['id'] ? 'selected' : '' ?>>
-                            <?= htmlspecialchars($s['name']) ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
+
             <div class="col-md-2">
                 <label for="brand" class="form-label">Azienda</label>
                 <select name="brand" id="brand" class="form-select">

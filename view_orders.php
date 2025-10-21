@@ -126,9 +126,9 @@ $statusOptions = [
     <!-- Filter Form -->
     <form method="GET" class="row g-3 mb-4">
         <div class="col-md-2">
-            <label for="supplier_id" class="form-label">Fornitore</label>
+            <label for="supplier_id" class="form-label">Commerciale</label>
             <select name="supplier_id" id="supplier_id" class="form-select">
-                <option value="">Tutti i fornitori</option>
+                <option value="">Tutti i commerciale</option>
                 <?php foreach ($suppliers as $s): ?>
                     <option value="<?= $s['id'] ?>" <?= $supplier_id == $s['id'] ? 'selected' : '' ?>>
                         <?= htmlspecialchars($s['name']) ?>

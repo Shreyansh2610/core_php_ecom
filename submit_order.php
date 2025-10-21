@@ -185,7 +185,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     P.IVA: {$brandData['vat']}<br>
                     Responsabile Vendite (Agente): {$brandData['agent']}<br>
                     Pec: {$brandData['pec']}<br>
-                    Payment: {$brandData['payment']} -->
+                    Pagamento: {$brandData['payment']} -->
                 </td>
                 <td width="50%" style="padding:3px;border: 1px solid black;">
                     <strong>{$orderSupplierName}</strong><br>
@@ -218,7 +218,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $total += $item['box_requested'];
         }
 
-        $html .= "<p><strong>Notes:</strong> {$notes}</p>";
+        $html .= "<p><strong>Note:</strong> {$notes}</p>";
         $html .= "<p><strong>Colli Totali:</strong> " . $total . "</p>";
 
         $html .= "<h3>Prodotti</h3>
@@ -226,9 +226,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <thead style='background:#D3D3D3'>
                   <tr>
                     <th width='20%'>ARTICOLO / SKU</th>
-                    <th width='60%' colspan='2'>DESCIZIONE</th>
-                    <th width='10%'>PZ COLLI</th>
-                    <th width='10%'>COLLI</th>
+                    <th width='60%' colspan='2'>Descrizione</th>
+                    <th width='10%' style='text-align: center;'>Pz Box</th>
+                    <th width='10%' style='text-align: center;'>COLLI</th>
                   </tr>
                 </thead>
                 <tbody>";
@@ -242,7 +242,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $html .= "<tr>
                     <td>{$item['sku']}</td>
                     <td colspan='2'>{$item['name']}</td>
-                    <td>{$item['units_per_box']}</td>
+                    <td style='text-align: center;'>{$item['units_per_box']}</td>
                     <td style='text-align: center;'>{$item['box_requested']}</td>
                   </tr>";
         }
